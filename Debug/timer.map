@@ -1,0 +1,175 @@
+
+Map of Debug\timer.sm8 from link file Debug\timer.lkf - Wed Jul 10 18:13:38 2019
+
+
+                               --------
+                               Segments
+                               --------
+
+start 00008080 end 00008080 length     0 segment .const
+start 00008083 end 00008250 length   461 segment .text
+start 00004000 end 00004000 length     0 segment .eeprom
+start 00000000 end 00000000 length     0 segment .bsct
+start 00000000 end 0000000a length    10 segment .ubsct
+start 0000000a end 0000000a length     0 segment .bit
+start 0000000a end 0000000a length     0 segment .share
+start 00000100 end 00000100 length     0 segment .data
+start 00000100 end 00000100 length     0 segment .bss
+start 00000000 end 00000333 length   819 segment .info.
+start 00000000 end 00000554 length  1364 segment .debug
+start 00008000 end 00008080 length   128 segment .const
+start 00008080 end 00008083 length     3 segment .init
+
+
+                               -------
+                               Modules
+                               -------
+
+C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\crtsi0.sm8:
+start 00008083 end 000080d3 length    80 section .text
+start 00000100 end 00000100 length     0 section .bss
+start 00000000 end 00000000 length     0 section .ubsct
+start 00000000 end 00000034 length    52 section .info.
+
+Debug\timer.o:
+start 000080d3 end 000081c7 length   244 section .text
+start 00000000 end 0000033b length   827 section .debug
+start 00000034 end 000000a0 length   108 section .info.
+
+Debug\main.o:
+start 000081c7 end 000081f5 length    46 section .text
+start 0000033b end 000003e9 length   174 section .debug
+start 000000a0 end 0000010b length   107 section .info.
+
+(C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\libm0.sm8)ladd.o:
+start 000081f5 end 0000820d length    24 section .text
+start 0000010b end 0000013a length    47 section .info.
+
+(C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\libm0.sm8)lreg.o:
+start 00000000 end 00000004 length     4 section .ubsct
+start 0000013a end 00000169 length    47 section .info.
+
+(C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\libm0.sm8)lsbc.o:
+start 0000820d end 00008224 length    23 section .text
+start 00000169 end 00000198 length    47 section .info.
+
+(C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\libm0.sm8)ltor.o:
+start 00008224 end 00008236 length    18 section .text
+start 00000198 end 000001c7 length    47 section .info.
+
+(C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\libm0.sm8)rtol.o:
+start 00008236 end 00008248 length    18 section .text
+start 000001c7 end 000001f6 length    47 section .info.
+
+(C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\libm0.sm8)utolx.o:
+start 00008248 end 0000824f length     7 section .text
+start 000001f6 end 00000226 length    48 section .info.
+
+(C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\libm0.sm8)xreg.o:
+start 00000004 end 00000007 length     3 section .ubsct
+start 00000226 end 00000255 length    47 section .info.
+
+(C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\libm0.sm8)yreg.o:
+start 00000007 end 0000000a length     3 section .ubsct
+start 00000255 end 00000284 length    47 section .info.
+
+Debug\stm8_interrupt_vector.o:
+start 0000824f end 00008250 length     1 section .text
+start 000003e9 end 00000554 length   363 section .debug
+start 00000284 end 00000300 length   124 section .info.
+start 00008000 end 00008080 length   128 section .const
+
+
+                             -----------
+                             Stack usage
+                             -----------
+
+Debug\main.o:
+_main                  >   33   (2)
+
+Debug\stm8_interrupt_vector.o:
+f_NonHandledInterrupt  >    6   (6)
+
+Debug\timer.o:
+_tim1InitOC                31   (12)
+_tim1OCSetMode             19   (16)
+_tim1OCSetValue            17   (14)
+_tim1SetValues             14   (14)
+
+Stack size: 39
+
+
+                              ---------
+                              Call tree
+                              ---------
+   1 > __stext: (0)
+
+   2 > _main: (2)
+   3      + _tim1InitOC: (12)
+   4      |    + _tim1OCSetMode: (16)
+   5      |    + _tim1OCSetValue: (14)
+          | 
+   6      + _tim1SetValues: (14)
+       
+   7 > f_NonHandledInterrupt: (6)
+
+   8   _tim1InitOC --> 3
+
+   9   _tim1OCSetMode --> 4
+
+  10   _tim1OCSetValue --> 5
+
+  11   _tim1SetValues --> 6
+
+
+
+                               -------
+                               Symbols
+                               -------
+
+__endmem                000001ff   defined in command file
+                                   *** not used ***
+__endzp                 0000000a   defined in command file section .ubsct
+                                   used in C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\crtsi0.sm8
+__idesc__               00008080   defined in linker section .init
+                                   used in C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\crtsi0.sm8
+__memory                00000100   defined in command file section .bss
+                                   used in C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\crtsi0.sm8
+__stack                 000003ff   defined in command file
+                                   used in C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\crtsi0.sm8
+__startmem              00000100   defined in command file section .bss
+                                   *** not used ***
+__stext                 00008083   defined in C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\crtsi0.sm8 section .text
+                                   used in Debug\stm8_interrupt_vector.o
+__vectab                00008000   defined in Debug\stm8_interrupt_vector.o section .const
+_exit                   000080d1   defined in C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\crtsi0.sm8 section .text
+_main                   000081c7   defined in Debug\main.o section .text
+                                   used in C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\crtsi0.sm8
+_tim1InitOC             000081a8   defined in Debug\timer.o section .text
+                                   used in Debug\main.o
+_tim1OCSetMode          0000816c   defined in Debug\timer.o section .text
+_tim1OCSetValue         00008121   defined in Debug\timer.o section .text
+_tim1SetValues          000080d3   defined in Debug\timer.o section .text
+                                   used in Debug\main.o
+c_ladd                  000081f5   defined in (C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\libm0.sm8)ladd.o section .text
+                                   used in Debug\timer.o
+c_lreg                  00000000   defined in (C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\libm0.sm8)lreg.o section .ubsct
+                                   used in Debug\timer.o
+                                           (C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\libm0.sm8)ladd.o
+                                           (C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\libm0.sm8)lsbc.o
+                                           (C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\libm0.sm8)ltor.o
+                                           (C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\libm0.sm8)rtol.o
+                                           (C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\libm0.sm8)utolx.o
+c_lsbc                  0000820d   defined in (C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\libm0.sm8)lsbc.o section .text
+                                   used in Debug\timer.o
+c_ltor                  00008224   defined in (C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\libm0.sm8)ltor.o section .text
+                                   used in Debug\timer.o
+c_rtol                  00008236   defined in (C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\libm0.sm8)rtol.o section .text
+                                   used in Debug\timer.o
+c_uitolx                00008248   defined in (C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\libm0.sm8)utolx.o section .text
+                                   used in Debug\timer.o
+c_x                     00000004   defined in (C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\libm0.sm8)xreg.o section .ubsct
+                                   used in C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\crtsi0.sm8
+c_y                     00000007   defined in (C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\libm0.sm8)yreg.o section .ubsct
+                                   used in C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\Lib\crtsi0.sm8
+f_NonHandledInterrupt   0000824f   defined in Debug\stm8_interrupt_vector.o section .text

@@ -1,0 +1,5 @@
+1.           Run cmd in administrator mode
+
+2.           Regsvr32 /u "C:\Program Files (x86)\Common Files\Microsoft Shared\DAO\DAO350.DLL"
+
+3.           Regsvr32 "C:\Program Files (x86)\Common Files\Microsoft Shared\DAO\DAO350.DLL"
