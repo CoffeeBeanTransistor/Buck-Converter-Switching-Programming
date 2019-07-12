@@ -17,7 +17,8 @@
 #define OC_PWM1  							6	//110
 #define OC_PWM2 							7	//111
 
-
+int determineMinPsc(double desiredTime, float freqPeriod);
+void setTim1Freq(uint16_t freq);
 void tim1SetValues(uint16_t arr, uint16_t psc, uint16_t cnt);
 void tim1OCSetMode(uint32_t channel, uint32_t mode);
 void tim1OCSetValue(uint32_t channel, uint16_t compareValue);

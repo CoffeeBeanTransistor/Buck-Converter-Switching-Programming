@@ -3,7 +3,7 @@ DumpRWOnFly1=0
 DumpRWOnFly2=0
 DumpRWOnFly3=0
 DumpRWOnFly4=0
-WatchVariables1=direction!4;mode1!4;mode2!4;configuration!4;pin!0;
+WatchVariables1=freqPeriod!0;desiredTime!0;psc!0;
 FormatWatch1=0
 FormatViewType1=1
 FormatViewAddress1=1
@@ -23,7 +23,7 @@ FormatWatch4=0
 FormatViewType4=1
 FormatViewAddress4=1
 WatchRWOnFlyTab4=0
-FormatLocals=0
+FormatLocals=4
 FormatParameters=0
 [DebugState_v1-Debug.AddOn.St7Registers]
 ActiveTab=2

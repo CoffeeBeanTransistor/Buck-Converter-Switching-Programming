@@ -10,6 +10,30 @@ typedef volatile uint8_t IoRegister;
 #define TIM1_ENABLE_CLK_GATING() 	(CLK->PCKENR1 = CLK_PCKENR1_TIM1)
 #define TIM1_MOE_ENABLE()					(TIM1->BKR) |= (1<<7)
 
+int determineMinPsc(double desiredTime, float freqPeriod) {
+	long int ticks;
+	int psc = 1;
+	float ms = (desiredTime/1000);
+	float temp = 0;
+	
+	do{
+		temp = freqPeriod * psc;
+		ticks = (ms/temp);
+		if(ticks > 65536)
+			psc++;
+	}while(ticks > 65536);
+	
+	return psc;
+}
+
+void setTim1Freq(uint16_t freq) {
+	int period;
+	
+	period = 1/freq;
+
+
+}
+
 void tim1SetValues(uint16_t arr, uint16_t psc, uint16_t cnt) {
 	IoRegister *tim_arr = &TIM1->ARRH;
 	IoRegister *tim_psc = &TIM1->PSCRH;

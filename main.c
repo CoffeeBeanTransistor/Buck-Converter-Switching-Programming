@@ -12,8 +12,11 @@
 #define PSCValue 			16
 #define CNTValue 			0
 
+int psc;
+
 void main()
 {
+	psc = determineMinPsc(100, 0.0000000625);
 	CLK->CKDIVR = 0x00;
 	configureGPIO(GPIOC, GPIO_PIN7, GPIO_DIR_OUT | GPIO_MODE_PUSH_PULL | GPIO_OUT_SPEED_2MH);
 	configureGPIO(GPIOC, GPIO_PIN4, GPIO_DIR_OUT | GPIO_MODE_PUSH_PULL | GPIO_OUT_SPEED_2MH);
