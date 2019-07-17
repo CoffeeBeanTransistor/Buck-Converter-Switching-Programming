@@ -1,7 +1,3 @@
-#ifndef __TIMER_H__
-#define __TIMER_H__
-
-#include <stdio.h>
 #include "stm8s.h"
 #include "timer.h"
 
@@ -10,15 +6,15 @@ typedef volatile uint8_t IoRegister;
 #define TIM1_ENABLE_CLK_GATING() 	(CLK->PCKENR1 = CLK_PCKENR1_TIM1)
 #define TIM1_MOE_ENABLE()					(TIM1->BKR) |= (1<<7)
 
-int determineMinPsc(double desiredTime, float freqPeriod) {
+
+uint16_t determineMinPsc(float desiredTime, float freqPeriod) {
 	long int ticks;
-	int psc = 1;
-	float ms = (desiredTime/1000);
+	uint16_t psc = 1;
 	float temp = 0;
 	
 	do{
 		temp = freqPeriod * psc;
-		ticks = (ms/temp);
+		ticks = (desiredTime/temp);
 		if(ticks > 65536)
 			psc++;
 	}while(ticks > 65536);
@@ -26,12 +22,29 @@ int determineMinPsc(double desiredTime, float freqPeriod) {
 	return psc;
 }
 
-void setTim1Freq(uint16_t freq) {
-	int period;
+uint16_t determineArr(float desiredTime, float freqPeriod,  uint16_t psc) {
+	uint16_t arr;
 	
-	period = 1/freq;
+	arr = (uint16_t)(desiredTime/(freqPeriod*psc));
+	return arr;
+}
 
-
+uint16_t determineOCValue(float arr, double dutyCycle) {
+	uint16_t OCValue;
+	
+	if(dutyCycle < 1 && dutyCycle > 0) {
+		OCValue = (uint16_t)(arr * dutyCycle);
+		return OCValue;
+	}
+	
+	
+	else if(dutyCycle < 100 && dutyCycle > 0) {
+		OCValue = (uint16_t)(arr * (dutyCycle / 100));
+		return OCValue;
+	}
+	
+	else 
+		return arr/2;
 }
 
 void tim1SetValues(uint16_t arr, uint16_t psc, uint16_t cnt) {
@@ -72,11 +85,38 @@ void tim1OCSetMode(uint32_t channel, uint32_t mode) {
 	*ccmr |= (mode << 4);
 }
 
-void tim1InitOC(uint32_t channel, uint32_t mode, uint16_t compareValue, uint16_t ARRValue, uint16_t PSCValue, uint16_t CNTValue) {
+void setTim1OCPeriod(float desiredTime, double dutyCycle, float freqPeriod) {
+	unsigned long int psc, arr, ocValue;
+	
+	psc = determineMinPsc(desiredTime, freqPeriod);
+	arr = determineArr(desiredTime, freqPeriod, psc);
+	ocValue = determineOCValue(arr, dutyCycle);
+	
+	tim1SetValues(arr, psc, 0);
+	tim1OCSetValue(TIM_CH2, ocValue);
+}
+
+void setTim1Freq(uint32_t desiredFreq, double dutyCycle) {
+	float freqPeriod;
+	float desiredTime;
+	uint32_t systemClkFreq;
+	int clkdivr = ((CLK->CKDIVR & 0x18) >> 3);
+	
+	switch(clkdivr) {
+		case 0 : systemClkFreq = 16000000;break;
+		case 1 : systemClkFreq = 8000000;break;
+		case 2 : systemClkFreq = 4000000;break;
+		case 3 : systemClkFreq = 2000000;break;
+		default: systemClkFreq = 2000000;break;
+	}
+	desiredTime = (1/(float)desiredFreq);
+	freqPeriod = (1/(float)systemClkFreq);
+	setTim1OCPeriod(desiredTime, dutyCycle, freqPeriod);
+}
+
+void tim1InitOC(uint32_t channel, uint32_t mode) {
 	TIM1_ENABLE_CLK_GATING();
 	tim1OCSetMode(channel, mode);
-	tim1OCSetValue(channel, compareValue);
-	tim1SetValues(ARRValue, PSCValue, CNTValue);
 	
 	if(channel > 2 && channel < 5)
 		TIM1->CCER2 |= (5 << (((channel) - 3) *4));
@@ -88,5 +128,3 @@ void tim1InitOC(uint32_t channel, uint32_t mode, uint16_t compareValue, uint16_t
 		return;
 	TIM1_MOE_ENABLE();
 }
-
-#endif //__TIMER_H__

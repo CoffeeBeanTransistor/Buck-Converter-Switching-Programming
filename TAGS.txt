@@ -64,7 +64,7 @@ ARRL	stm8s.h	1123;"	member	struct:TIM5_struct
 ARRL	stm8s.h	617;"	member	struct:TIM1_struct
 ARRL	stm8s.h	828;"	member	struct:TIM2_struct
 ARRL	stm8s.h	950;"	member	struct:TIM3_struct
-ARRValue	main.c	10;"	macro	file:
+ARRValue	main.c	12;"	macro	file:
 AWCRH	stm8s.h	319;"	member	struct:ADC1_struct
 AWCRL	stm8s.h	320;"	member	struct:ADC1_struct
 AWSRH	stm8s.h	317;"	member	struct:ADC1_struct
@@ -99,7 +99,6 @@ BRR2	stm8s.h	1854;"	member	struct:UART2_struct
 BRR2	stm8s.h	1962;"	member	struct:UART3_struct
 BTR1	stm8s.h	2179;"	member	struct:__anon5::__anon6::__anon12
 BTR2	stm8s.h	2180;"	member	struct:__anon5::__anon6::__anon12
-BUFSIZ	c:\program files (x86)\cosmic\fse_compilers\cxstm8\hstm8\stdio.h	26;"	macro
 BYTE_0	stm8s.h	2685;"	macro
 BYTE_1	stm8s.h	2686;"	macro
 BYTE_2	stm8s.h	2687;"	macro
@@ -367,7 +366,7 @@ CNTRL	stm8s.h	1120;"	member	struct:TIM5_struct
 CNTRL	stm8s.h	613;"	member	struct:TIM1_struct
 CNTRL	stm8s.h	825;"	member	struct:TIM2_struct
 CNTRL	stm8s.h	947;"	member	struct:TIM3_struct
-CNTValue	main.c	12;"	macro	file:
+CNTValue	main.c	14;"	macro	file:
 CONST	stm8s.h	116;"	macro
 CONST	stm8s.h	122;"	macro
 CONST	stm8s.h	136;"	macro
@@ -421,7 +420,7 @@ CSR	stm8s.h	466;"	member	struct:BEEP_struct
 CSSR	stm8s.h	502;"	member	struct:CLK_struct
 ChgBit	stm8s.h	2677;"	macro
 ClrBit	stm8s.h	2675;"	macro
-CompareValue	main.c	9;"	macro	file:
+CompareValue	main.c	11;"	macro	file:
 Config	stm8s.h	2189;"	member	union:__anon5::__anon6	typeref:struct:__anon5::__anon6::__anon12
 DB0RH	stm8s.h	284;"	member	struct:ADC1_struct
 DB0RL	stm8s.h	285;"	member	struct:ADC1_struct
@@ -471,7 +470,6 @@ EGR	stm8s.h	818;"	member	struct:TIM2_struct
 EGR	stm8s.h	942;"	member	struct:TIM3_struct
 EIER	stm8s.h	2176;"	member	struct:__anon5::__anon6::__anon12
 ENABLE	stm8s.h	223;"	enumerator	enum:__anon3
-EOF	c:\program files (x86)\cosmic\fse_compilers\cxstm8\hstm8\stdio.h	27;"	macro
 ERROR	stm8s.h	226;"	enumerator	enum:__anon4
 ESR	stm8s.h	2175;"	member	struct:__anon5::__anon6::__anon12
 ETR	stm8s.h	601;"	member	struct:TIM1_struct
@@ -622,7 +620,25 @@ GPIOI_BaseAddress	stm8s.h	2455;"	macro
 GPIO_CR1_RESET_VALUE	stm8s.h	269;"	macro
 GPIO_CR2_RESET_VALUE	stm8s.h	270;"	macro
 GPIO_DDR_RESET_VALUE	stm8s.h	268;"	macro
+GPIO_DIR_IN	gpio.h	14;"	macro
+GPIO_DIR_OUT	gpio.h	15;"	macro
+GPIO_EXT_INT_DISABLE	gpio.h	22;"	macro
+GPIO_EXT_INT_ENABLE	gpio.h	23;"	macro
+GPIO_MODE_FLOATING_INPUT	gpio.h	17;"	macro
+GPIO_MODE_PSEUDO_OPEN_DRAIN	gpio.h	19;"	macro
+GPIO_MODE_PULLUP_INPUT	gpio.h	18;"	macro
+GPIO_MODE_PUSH_PULL	gpio.h	20;"	macro
 GPIO_ODR_RESET_VALUE	stm8s.h	267;"	macro
+GPIO_OUT_SPEED_10MH	gpio.h	25;"	macro
+GPIO_OUT_SPEED_2MH	gpio.h	24;"	macro
+GPIO_PIN0	gpio.h	5;"	macro
+GPIO_PIN1	gpio.h	6;"	macro
+GPIO_PIN2	gpio.h	7;"	macro
+GPIO_PIN3	gpio.h	8;"	macro
+GPIO_PIN4	gpio.h	9;"	macro
+GPIO_PIN5	gpio.h	10;"	macro
+GPIO_PIN6	gpio.h	11;"	macro
+GPIO_PIN7	gpio.h	12;"	macro
 GPIO_TypeDef	stm8s.h	261;"	typedef	typeref:struct:GPIO_struct
 GPIO_struct	stm8s.h	253;"	struct
 GTR	stm8s.h	1762;"	member	struct:UART1_struct
@@ -735,7 +751,7 @@ IWDG_PR_RESET_VALUE	stm8s.h	1605;"	macro
 IWDG_RLR_RESET_VALUE	stm8s.h	1606;"	macro
 IWDG_TypeDef	stm8s.h	1599;"	typedef	typeref:struct:IWDG_struct
 IWDG_struct	stm8s.h	1593;"	struct
-IoRegister	common.h	3;"	typedef
+IoRegister	timer.c	4;"	typedef	file:
 KR	stm8s.h	1595;"	member	struct:IWDG_struct
 LSI_VALUE	stm8s.h	109;"	macro
 LTRH	stm8s.h	315;"	member	struct:ADC1_struct
@@ -788,18 +804,17 @@ NOPT3	stm8s.h	1576;"	member	struct:OPT_struct
 NOPT4	stm8s.h	1578;"	member	struct:OPT_struct
 NOPT5	stm8s.h	1580;"	member	struct:OPT_struct
 NOPT7	stm8s.h	1584;"	member	struct:OPT_struct
-NULL	c:\program files (x86)\cosmic\fse_compilers\cxstm8\hstm8\stdio.h	30;"	macro
 NonHandledInterrupt	stm8_interrupt_vector.c	12;"	function	signature:(void)
 OARH	stm8s.h	1318;"	member	struct:I2C_struct
 OARL	stm8s.h	1317;"	member	struct:I2C_struct
-OC_ACTIVE_ON_MATCH	timer.h	13;"	macro
-OC_FORCE_ACTIVE	timer.h	17;"	macro
-OC_FORCE_INACTIVE	timer.h	16;"	macro
-OC_FROZEN	timer.h	12;"	macro
-OC_INACTIVE_ON_MATCH	timer.h	14;"	macro
-OC_PWM1	timer.h	18;"	macro
-OC_PWM2	timer.h	19;"	macro
-OC_TOGGLE	timer.h	15;"	macro
+OC_ACTIVE_ON_MATCH	timer.h	23;"	macro
+OC_FORCE_ACTIVE	timer.h	27;"	macro
+OC_FORCE_INACTIVE	timer.h	26;"	macro
+OC_FROZEN	timer.h	22;"	macro
+OC_INACTIVE_ON_MATCH	timer.h	24;"	macro
+OC_PWM1	timer.h	28;"	macro
+OC_PWM2	timer.h	29;"	macro
+OC_TOGGLE	timer.h	25;"	macro
 ODR	stm8s.h	255;"	member	struct:GPIO_struct
 OISR	stm8s.h	629;"	member	struct:TIM1_struct
 OPT	stm8s.h	2514;"	macro
@@ -825,7 +840,7 @@ PSCR	stm8s.h	826;"	member	struct:TIM2_struct
 PSCR	stm8s.h	948;"	member	struct:TIM3_struct
 PSCRH	stm8s.h	614;"	member	struct:TIM1_struct
 PSCRL	stm8s.h	615;"	member	struct:TIM1_struct
-PSCValue	main.c	11;"	macro	file:
+PSCValue	main.c	13;"	macro	file:
 PSR	stm8s.h	2059;"	member	struct:__anon5
 PUKR	stm8s.h	1508;"	member	struct:FLASH_struct
 Page	stm8s.h	2211;"	member	struct:__anon5	typeref:union:__anon5::__anon6
@@ -1002,6 +1017,7 @@ TIM1_CNTRH_CNT	stm8s.h	757;"	macro
 TIM1_CNTRH_RESET_VALUE	stm8s.h	651;"	macro
 TIM1_CNTRL_CNT	stm8s.h	759;"	macro
 TIM1_CNTRL_RESET_VALUE	stm8s.h	652;"	macro
+TIM1_COUNTER_ENABLE	timer.h	15;"	macro
 TIM1_CR1_ARPE	stm8s.h	678;"	macro
 TIM1_CR1_CEN	stm8s.h	684;"	macro
 TIM1_CR1_CMS	stm8s.h	679;"	macro
@@ -1026,7 +1042,7 @@ TIM1_EGR_COMG	stm8s.h	725;"	macro
 TIM1_EGR_RESET_VALUE	stm8s.h	644;"	macro
 TIM1_EGR_TG	stm8s.h	724;"	macro
 TIM1_EGR_UG	stm8s.h	730;"	macro
-TIM1_ENABLE_CLK_GATING	timer.h	6;"	macro
+TIM1_ENABLE_CLK_GATING	timer.c	6;"	macro	file:
 TIM1_ETR_ECE	stm8s.h	696;"	macro
 TIM1_ETR_ETF	stm8s.h	698;"	macro
 TIM1_ETR_ETP	stm8s.h	695;"	macro
@@ -1041,6 +1057,7 @@ TIM1_IER_COMIE	stm8s.h	702;"	macro
 TIM1_IER_RESET_VALUE	stm8s.h	641;"	macro
 TIM1_IER_TIE	stm8s.h	701;"	macro
 TIM1_IER_UIE	stm8s.h	707;"	macro
+TIM1_MOE_ENABLE	timer.c	7;"	macro	file:
 TIM1_OISR_OIS1	stm8s.h	798;"	macro
 TIM1_OISR_OIS1N	stm8s.h	797;"	macro
 TIM1_OISR_OIS2	stm8s.h	796;"	macro
@@ -1328,10 +1345,10 @@ TIM6_SR1_TIF	stm8s.h	1293;"	macro
 TIM6_SR1_UIF	stm8s.h	1294;"	macro
 TIM6_TypeDef	stm8s.h	1256;"	typedef	typeref:struct:TIM6_struct
 TIM6_struct	stm8s.h	1244;"	struct
-TIM_CH1	timer.h	7;"	macro
-TIM_CH2	timer.h	8;"	macro
-TIM_CH3	timer.h	9;"	macro
-TIM_CH4	timer.h	10;"	macro
+TIM_CH1	timer.h	17;"	macro
+TIM_CH2	timer.h	18;"	macro
+TIM_CH3	timer.h	19;"	macro
+TIM_CH4	timer.h	20;"	macro
 TINY	stm8s.h	114;"	macro
 TINY	stm8s.h	120;"	macro
 TINY	stm8s.h	134;"	macro
@@ -1532,31 +1549,35 @@ WWDG_struct	stm8s.h	1617;"	struct
 _COSMIC_	stm8s.h	73;"	macro
 _IAR_	stm8s.h	77;"	macro
 _RAISONANCE_	stm8s.h	75;"	macro
+__GPIO_H	gpio.h	2;"	macro
 __I	stm8s.h	194;"	macro
 __IO	stm8s.h	196;"	macro
 __MODS0__	c:\program files (x86)\cosmic\fse_compilers\cxstm8\hstm8\mods0.h	11;"	macro
 __O	stm8s.h	195;"	macro
-__SIZE_T__	c:\program files (x86)\cosmic\fse_compilers\cxstm8\hstm8\stdio.h	9;"	macro
-__STDIO__	c:\program files (x86)\cosmic\fse_compilers\cxstm8\hstm8\stdio.h	6;"	macro
 __STM8S_H	stm8s.h	24;"	macro
 __STM8S_STDPERIPH_VERSION	stm8s.h	174;"	macro
 __STM8S_STDPERIPH_VERSION_MAIN	stm8s.h	170;"	macro
 __STM8S_STDPERIPH_VERSION_RC	stm8s.h	173;"	macro
 __STM8S_STDPERIPH_VERSION_SUB1	stm8s.h	171;"	macro
 __STM8S_STDPERIPH_VERSION_SUB2	stm8s.h	172;"	macro
-__TIMER_H__	timer.c	2;"	macro	file:
 __TIMER_H__	timer.h	2;"	macro
 _stext	stm8_interrupt_vector.c	20;"	prototype	file:
 _vectab	stm8_interrupt_vector.c	22;"	variable
 bool	stm8s.h	219;"	typedef	typeref:enum:__anon1
+configureGPIO	gpio.c	4;"	function	signature:(GPIO_TypeDef *port, int pin, uint8_t configuration)
+configureGPIO	gpio.h	27;"	prototype	signature:( GPIO_TypeDef *port, int pin, uint8_t configuration )
+determineArr	timer.c	25;"	function	signature:(float desiredTime, float freqPeriod, uint16_t psc)
+determineArr	timer.h	6;"	prototype	signature:(float desiredTime, float freqPeriod, uint16_t psc)
+determineMinPsc	timer.c	10;"	function	signature:(float desiredTime, float freqPeriod)
+determineMinPsc	timer.h	7;"	prototype	signature:(float desiredTime, float freqPeriod)
+determineOCValue	timer.c	32;"	function	signature:(float arr, double dutyCycle)
+determineOCValue	timer.h	5;"	prototype	signature:(float arr, double dutyCycle)
 disableInterrupts	stm8s.h	2602;"	macro
 disableInterrupts	stm8s.h	2611;"	macro
 disableInterrupts	stm8s.h	2621;"	macro
 enableInterrupts	stm8s.h	2601;"	macro
 enableInterrupts	stm8s.h	2610;"	macro
 enableInterrupts	stm8s.h	2620;"	macro
-getchar	c:\program files (x86)\cosmic\fse_compilers\cxstm8\hstm8\stdio.h	15;"	prototype	signature:(void)
-gets	c:\program files (x86)\cosmic\fse_compilers\cxstm8\hstm8\stdio.h	16;"	prototype	signature:(char *s)
 halt	stm8s.h	2608;"	macro
 halt	stm8s.h	2617;"	macro
 halt	stm8s.h	2627;"	macro
@@ -1567,34 +1588,31 @@ interrupt_handler	stm8_interrupt_vector.c	9;"	member	struct:interrupt_vector	fil
 interrupt_handler_t	stm8_interrupt_vector.c	5;"	typedef	file:
 interrupt_instruction	stm8_interrupt_vector.c	8;"	member	struct:interrupt_vector	file:
 interrupt_vector	stm8_interrupt_vector.c	7;"	struct	file:
-main	main.c	14;"	function
+main	main.c	16;"	function
 nop	stm8s.h	2605;"	macro
 nop	stm8s.h	2614;"	macro
 nop	stm8s.h	2624;"	macro
-printf	c:\program files (x86)\cosmic\fse_compilers\cxstm8\hstm8\stdio.h	17;"	prototype	signature:(char *format, ...)
-putchar	c:\program files (x86)\cosmic\fse_compilers\cxstm8\hstm8\stdio.h	18;"	prototype	signature:(char c)
-puts	c:\program files (x86)\cosmic\fse_compilers\cxstm8\hstm8\stdio.h	19;"	prototype	signature:(char *s)
 rim	stm8s.h	2603;"	macro
 rim	stm8s.h	2612;"	macro
 rim	stm8s.h	2622;"	macro
 s16	stm8s.h	211;"	typedef
 s32	stm8s.h	210;"	typedef
 s8	stm8s.h	212;"	typedef
-scanf	c:\program files (x86)\cosmic\fse_compilers\cxstm8\hstm8\stdio.h	20;"	prototype	signature:(char *format, ...)
+setTim1Freq	timer.c	103;"	function	signature:(uint32_t freq, double dutyCycle)
+setTim1Freq	timer.h	8;"	prototype	signature:(uint32_t freq, double dutyCycle)
+setTim1OCPeriod	timer.c	90;"	function	signature:(float desiredTime, double dutyCycle, uint32_t freq)
+setTim1OCPeriod	timer.h	9;"	prototype	signature:(float desiredTime, double dutyCycle, uint32_t freq)
 sim	stm8s.h	2604;"	macro
 sim	stm8s.h	2613;"	macro
 sim	stm8s.h	2623;"	macro
-size_t	c:\program files (x86)\cosmic\fse_compilers\cxstm8\hstm8\stdio.h	10;"	typedef
-sprintf	c:\program files (x86)\cosmic\fse_compilers\cxstm8\hstm8\stdio.h	22;"	prototype	signature:(char *s, char *format, ...)
-sscanf	c:\program files (x86)\cosmic\fse_compilers\cxstm8\hstm8\stdio.h	21;"	prototype	signature:(char *s, char *format, ...)
-tim1InitOC	timer.c	45;"	function	signature:(uint32_t channel, uint32_t mode, uint16_t compareValue, uint16_t ARRValue, uint16_t PSCValue, uint16_t CNTValue)
-tim1InitOC	timer.h	25;"	prototype	signature:(uint32_t channel, uint32_t mode, uint16_t compareValue, uint16_t ARRValue, uint16_t PSCValue, uint16_t CNTValue)
-tim1OCSetMode	timer.c	36;"	function	signature:(uint32_t channel, uint32_t mode)
-tim1OCSetMode	timer.h	23;"	prototype	signature:(uint32_t channel, uint32_t mode)
-tim1OCSetValue	timer.c	25;"	function	signature:(uint32_t channel, uint16_t compareValue)
-tim1OCSetValue	timer.h	24;"	prototype	signature:(uint32_t channel, uint16_t compareValue)
-tim1SetValues	timer.c	9;"	function	signature:(uint16_t arr, uint16_t psc, uint16_t cnt)
-tim1SetValues	timer.h	22;"	prototype	signature:(uint16_t arr, uint16_t psc, uint16_t cnt)
+tim1InitOC	timer.c	111;"	function	signature:(uint32_t channel, uint32_t mode, uint16_t compareValue, uint16_t ARRValue, uint16_t PSCValue, uint16_t CNTValue)
+tim1InitOC	timer.h	13;"	prototype	signature:(uint32_t channel, uint32_t mode, uint16_t compareValue, uint16_t ARRValue, uint16_t PSCValue, uint16_t CNTValue)
+tim1OCSetMode	timer.c	81;"	function	signature:(uint32_t channel, uint32_t mode)
+tim1OCSetMode	timer.h	11;"	prototype	signature:(uint32_t channel, uint32_t mode)
+tim1OCSetValue	timer.c	70;"	function	signature:(uint32_t channel, uint16_t compareValue)
+tim1OCSetValue	timer.h	12;"	prototype	signature:(uint32_t channel, uint16_t compareValue)
+tim1SetValues	timer.c	52;"	function	signature:(uint16_t arr, uint16_t psc, uint16_t cnt)
+tim1SetValues	timer.h	10;"	prototype	signature:(uint16_t arr, uint16_t psc, uint16_t cnt)
 trap	stm8s.h	2606;"	macro
 trap	stm8s.h	2615;"	macro
 trap	stm8s.h	2625;"	macro

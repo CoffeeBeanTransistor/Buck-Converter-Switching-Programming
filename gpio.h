@@ -1,5 +1,6 @@
-#ifndef __GPIO_H__
-#define __GPIO_H__
+#ifndef __GPIO_H
+#define __GPIO_H
+#include "stm8s.h"
 
 #define GPIO_PIN0 0
 #define GPIO_PIN1 1
@@ -23,7 +24,6 @@
 #define GPIO_OUT_SPEED_2MH					(0<<2)
 #define GPIO_OUT_SPEED_10MH					(1<<2)
 
-void configureGPIO(GPIO_TypeDef *port, int pin, uint8_t configuration);
+void configureGPIO ( GPIO_TypeDef *port, int pin, uint8_t configuration );
 
-
-#endif //__GPIO_H__
+#endif 
