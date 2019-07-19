@@ -1,632 +1,708 @@
    1                     ; C Compiler for STM8 (COSMIC Software)
    2                     ; Parser V4.11.13 - 05 Feb 2019
    3                     ; Generator (Limited) V4.4.9 - 06 Feb 2019
-  89                     .const:	section	.text
-  90  0000               L6:
-  91  0000 00010001      	dc.l	65537
-  92                     ; 10 uint16_t determineMinPsc(float desiredTime, float freqPeriod) {
-  93                     	scross	off
-  94                     	switch	.text
-  95  0000               _determineMinPsc:
-  97  0000 520a          	subw	sp,#10
-  98       0000000a      OFST:	set	10
- 101                     ; 12 	uint16_t psc = 1;
- 103  0002 ae0001        	ldw	x,#1
- 104  0005 1f05          	ldw	(OFST-5,sp),x
- 106                     ; 13 	float temp = 0;
- 108  0007               L74:
- 109                     ; 16 		temp = freqPeriod * psc;
- 111  0007 1e05          	ldw	x,(OFST-5,sp)
- 112  0009 cd0000        	call	c_uitof
- 114  000c 96            	ldw	x,sp
- 115  000d 1c0001        	addw	x,#OFST-9
- 116  0010 cd0000        	call	c_rtol
- 119  0013 96            	ldw	x,sp
- 120  0014 1c0011        	addw	x,#OFST+7
- 121  0017 cd0000        	call	c_ltor
- 123  001a 96            	ldw	x,sp
- 124  001b 1c0001        	addw	x,#OFST-9
- 125  001e cd0000        	call	c_fmul
- 127  0021 96            	ldw	x,sp
- 128  0022 1c0007        	addw	x,#OFST-3
- 129  0025 cd0000        	call	c_rtol
- 132                     ; 17 		ticks = (desiredTime/temp);
- 134  0028 96            	ldw	x,sp
- 135  0029 1c000d        	addw	x,#OFST+3
- 136  002c cd0000        	call	c_ltor
- 138  002f 96            	ldw	x,sp
- 139  0030 1c0007        	addw	x,#OFST-3
- 140  0033 cd0000        	call	c_fdiv
- 142  0036 cd0000        	call	c_ftol
- 144  0039 96            	ldw	x,sp
- 145  003a 1c0007        	addw	x,#OFST-3
- 146  003d cd0000        	call	c_rtol
- 149                     ; 18 		if(ticks > 65536)
- 151  0040 9c            	rvf
- 152  0041 96            	ldw	x,sp
- 153  0042 1c0007        	addw	x,#OFST-3
- 154  0045 cd0000        	call	c_ltor
- 156  0048 ae0000        	ldw	x,#L6
- 157  004b cd0000        	call	c_lcmp
- 159  004e 2f07          	jrslt	L15
- 160                     ; 19 			psc++;
- 162  0050 1e05          	ldw	x,(OFST-5,sp)
- 163  0052 1c0001        	addw	x,#1
- 164  0055 1f05          	ldw	(OFST-5,sp),x
- 166  0057               L15:
- 167                     ; 20 	}while(ticks > 65536);
- 169  0057 9c            	rvf
- 170  0058 96            	ldw	x,sp
- 171  0059 1c0007        	addw	x,#OFST-3
- 172  005c cd0000        	call	c_ltor
- 174  005f ae0000        	ldw	x,#L6
- 175  0062 cd0000        	call	c_lcmp
- 177  0065 2ea0          	jrsge	L74
- 178                     ; 22 	return psc;
- 180  0067 1e05          	ldw	x,(OFST-5,sp)
- 183  0069 5b0a          	addw	sp,#10
- 184  006b 81            	ret
- 245                     ; 25 uint16_t determineArr(float desiredTime, float freqPeriod,  uint16_t psc) {
- 246                     	switch	.text
- 247  006c               _determineArr:
- 249  006c 520a          	subw	sp,#10
- 250       0000000a      OFST:	set	10
- 253                     ; 28 	arr = (uint16_t)(desiredTime/(freqPeriod*psc));
- 255  006e 1e15          	ldw	x,(OFST+11,sp)
- 256  0070 cd0000        	call	c_uitof
- 258  0073 96            	ldw	x,sp
- 259  0074 1c0005        	addw	x,#OFST-5
- 260  0077 cd0000        	call	c_rtol
- 263  007a 96            	ldw	x,sp
- 264  007b 1c0011        	addw	x,#OFST+7
- 265  007e cd0000        	call	c_ltor
- 267  0081 96            	ldw	x,sp
- 268  0082 1c0005        	addw	x,#OFST-5
- 269  0085 cd0000        	call	c_fmul
- 271  0088 96            	ldw	x,sp
- 272  0089 1c0001        	addw	x,#OFST-9
- 273  008c cd0000        	call	c_rtol
- 276  008f 96            	ldw	x,sp
- 277  0090 1c000d        	addw	x,#OFST+3
- 278  0093 cd0000        	call	c_ltor
- 280  0096 96            	ldw	x,sp
- 281  0097 1c0001        	addw	x,#OFST-9
- 282  009a cd0000        	call	c_fdiv
- 284  009d cd0000        	call	c_ftoi
- 286  00a0 1f09          	ldw	(OFST-1,sp),x
- 288                     ; 29 	return arr;
- 290  00a2 1e09          	ldw	x,(OFST-1,sp)
- 293  00a4 5b0a          	addw	sp,#10
- 294  00a6 81            	ret
- 346                     ; 32 uint16_t determineOCValue(float arr, double dutyCycle) {
- 347                     	switch	.text
- 348  00a7               _determineOCValue:
- 350  00a7 5206          	subw	sp,#6
- 351       00000006      OFST:	set	6
- 354                     ; 35 	if(dutyCycle < 1 && dutyCycle > 0) {
- 356  00a9 9c            	rvf
- 357  00aa a601          	ld	a,#1
- 358  00ac cd0000        	call	c_ctof
- 360  00af 96            	ldw	x,sp
- 361  00b0 1c0001        	addw	x,#OFST-5
- 362  00b3 cd0000        	call	c_rtol
- 365  00b6 96            	ldw	x,sp
- 366  00b7 1c000d        	addw	x,#OFST+7
- 367  00ba cd0000        	call	c_ltor
- 369  00bd 96            	ldw	x,sp
- 370  00be 1c0001        	addw	x,#OFST-5
- 371  00c1 cd0000        	call	c_fcmp
- 373  00c4 2e1d          	jrsge	L731
- 375  00c6 9c            	rvf
- 376  00c7 9c            	rvf
- 377  00c8 0d0d          	tnz	(OFST+7,sp)
- 378  00ca 2d17          	jrsle	L731
- 379                     ; 36 		OCValue = (uint16_t)(arr * dutyCycle);
- 381  00cc 96            	ldw	x,sp
- 382  00cd 1c0009        	addw	x,#OFST+3
- 383  00d0 cd0000        	call	c_ltor
- 385  00d3 96            	ldw	x,sp
- 386  00d4 1c000d        	addw	x,#OFST+7
- 387  00d7 cd0000        	call	c_fmul
- 389  00da cd0000        	call	c_ftoi
- 391  00dd 1f05          	ldw	(OFST-1,sp),x
- 393                     ; 37 		return OCValue;
- 395  00df 1e05          	ldw	x,(OFST-1,sp)
- 397  00e1 203e          	jra	L41
- 398  00e3               L731:
- 399                     ; 41 	else if(dutyCycle < 100 && dutyCycle > 0) {
- 401  00e3 9c            	rvf
- 402  00e4 a664          	ld	a,#100
- 403  00e6 cd0000        	call	c_ctof
- 405  00e9 96            	ldw	x,sp
- 406  00ea 1c0001        	addw	x,#OFST-5
- 407  00ed cd0000        	call	c_rtol
- 410  00f0 96            	ldw	x,sp
- 411  00f1 1c000d        	addw	x,#OFST+7
- 412  00f4 cd0000        	call	c_ltor
- 414  00f7 96            	ldw	x,sp
- 415  00f8 1c0001        	addw	x,#OFST-5
- 416  00fb cd0000        	call	c_fcmp
- 418  00fe 2e24          	jrsge	L341
- 420  0100 9c            	rvf
- 421  0101 9c            	rvf
- 422  0102 0d0d          	tnz	(OFST+7,sp)
- 423  0104 2d1e          	jrsle	L341
- 424                     ; 42 		OCValue = (uint16_t)(arr * (dutyCycle / 100));
- 426  0106 96            	ldw	x,sp
- 427  0107 1c000d        	addw	x,#OFST+7
- 428  010a cd0000        	call	c_ltor
- 430  010d ae0010        	ldw	x,#L151
- 431  0110 cd0000        	call	c_fdiv
- 433  0113 96            	ldw	x,sp
- 434  0114 1c0009        	addw	x,#OFST+3
- 435  0117 cd0000        	call	c_fmul
- 437  011a cd0000        	call	c_ftoi
- 439  011d 1f05          	ldw	(OFST-1,sp),x
- 441                     ; 43 		return OCValue;
- 443  011f 1e05          	ldw	x,(OFST-1,sp)
- 445  0121               L41:
- 447  0121 5b06          	addw	sp,#6
- 448  0123 81            	ret
- 449  0124               L341:
- 450                     ; 47 		return arr/2;
- 452  0124 96            	ldw	x,sp
- 453  0125 1c0009        	addw	x,#OFST+3
- 454  0128 cd0000        	call	c_ltor
- 456  012b ae000c        	ldw	x,#L361
- 457  012e cd0000        	call	c_fdiv
- 459  0131 cd0000        	call	c_ftoi
- 462  0134 20eb          	jra	L41
- 544                     ; 52 void tim1SetValues(uint16_t arr, uint16_t psc, uint16_t cnt) {
- 545                     	switch	.text
- 546  0136               _tim1SetValues:
- 548  0136 89            	pushw	x
- 549  0137 5206          	subw	sp,#6
- 550       00000006      OFST:	set	6
- 553                     ; 53 	IoRegister *tim_arr = &TIM1->ARRH;
- 555  0139 ae5262        	ldw	x,#21090
- 556  013c 1f01          	ldw	(OFST-5,sp),x
- 558                     ; 54 	IoRegister *tim_psc = &TIM1->PSCRH;
- 560  013e ae5260        	ldw	x,#21088
- 561  0141 1f03          	ldw	(OFST-3,sp),x
- 563                     ; 55 	IoRegister *tim_cnt = &TIM1->CNTRH;
- 565  0143 ae525e        	ldw	x,#21086
- 566  0146 1f05          	ldw	(OFST-1,sp),x
- 568                     ; 57 	psc -= 1;
- 570  0148 1e0b          	ldw	x,(OFST+5,sp)
- 571  014a 1d0001        	subw	x,#1
- 572  014d 1f0b          	ldw	(OFST+5,sp),x
- 573                     ; 59 	*tim_arr = ((0xff00 & arr) >> 8);
- 575  014f 7b07          	ld	a,(OFST+1,sp)
- 576  0151 c75262        	ld	21090,a
- 577                     ; 60 	*tim_psc = ((0xff00 & psc) >> 8);
- 579  0154 7b0b          	ld	a,(OFST+5,sp)
- 580  0156 c75260        	ld	21088,a
- 581                     ; 61 	*tim_cnt = ((0xff00 & cnt) >> 8);
- 583  0159 7b0d          	ld	a,(OFST+7,sp)
- 584  015b c7525e        	ld	21086,a
- 585                     ; 62 	tim_arr++;
- 587  015e 1e01          	ldw	x,(OFST-5,sp)
- 588  0160 1c0001        	addw	x,#1
- 589  0163 1f01          	ldw	(OFST-5,sp),x
- 591                     ; 63 	tim_psc++;
- 593  0165 1e03          	ldw	x,(OFST-3,sp)
- 594  0167 1c0001        	addw	x,#1
- 595  016a 1f03          	ldw	(OFST-3,sp),x
- 597                     ; 64 	tim_cnt++;
- 599  016c 1e05          	ldw	x,(OFST-1,sp)
- 600  016e 1c0001        	addw	x,#1
- 601  0171 1f05          	ldw	(OFST-1,sp),x
- 603                     ; 65 	*tim_arr = (0x00ff & arr);
- 605  0173 7b08          	ld	a,(OFST+2,sp)
- 606  0175 a4ff          	and	a,#255
- 607  0177 1e01          	ldw	x,(OFST-5,sp)
- 608  0179 f7            	ld	(x),a
- 609                     ; 66 	*tim_psc = (0x00ff & psc);
- 611  017a 7b0c          	ld	a,(OFST+6,sp)
- 612  017c a4ff          	and	a,#255
- 613  017e 1e03          	ldw	x,(OFST-3,sp)
- 614  0180 f7            	ld	(x),a
- 615                     ; 67 	*tim_cnt = (0x00ff & cnt);
- 617  0181 7b0e          	ld	a,(OFST+8,sp)
- 618  0183 a4ff          	and	a,#255
- 619  0185 1e05          	ldw	x,(OFST-1,sp)
- 620  0187 f7            	ld	(x),a
- 621                     ; 68 }
- 624  0188 5b08          	addw	sp,#8
- 625  018a 81            	ret
- 678                     ; 70 void tim1OCSetValue(uint32_t channel, uint16_t compareValue) {
+  72                     ; 9 void setTim1Deadtime(float deadtime) {
+  74                     	switch	.text
+  75  0000               _setTim1Deadtime:
+  77  0000 5208          	subw	sp,#8
+  78       00000008      OFST:	set	8
+  81                     ; 10 	uint32_t systemClkFreq = getMasterClkFreq();
+  83  0002 cd03e5        	call	_getMasterClkFreq
+  85  0005 96            	ldw	x,sp
+  86  0006 1c0005        	addw	x,#OFST-3
+  87  0009 cd0000        	call	c_rtol
+  90                     ; 11 	float steps = (1/(float)systemClkFreq);
+  92  000c 96            	ldw	x,sp
+  93  000d 1c0005        	addw	x,#OFST-3
+  94  0010 cd0000        	call	c_ltor
+  96  0013 cd0000        	call	c_ultof
+  98  0016 96            	ldw	x,sp
+  99  0017 1c0001        	addw	x,#OFST-7
+ 100  001a cd0000        	call	c_rtol
+ 103  001d a601          	ld	a,#1
+ 104  001f cd0000        	call	c_ctof
+ 106  0022 96            	ldw	x,sp
+ 107  0023 1c0001        	addw	x,#OFST-7
+ 108  0026 cd0000        	call	c_fdiv
+ 110  0029 96            	ldw	x,sp
+ 111  002a 1c0005        	addw	x,#OFST-3
+ 112  002d cd0000        	call	c_rtol
+ 115                     ; 12 	deadtime *= 0.000000001;
+ 117  0030 ae0018        	ldw	x,#L34
+ 118  0033 cd0000        	call	c_ltor
+ 120  0036 96            	ldw	x,sp
+ 121  0037 1c000b        	addw	x,#OFST+3
+ 122  003a cd0000        	call	c_fgmul
+ 124                     ; 14 	if(deadtime > (steps * 127)) {
+ 126  003d 9c            	rvf
+ 127  003e 96            	ldw	x,sp
+ 128  003f 1c0005        	addw	x,#OFST-3
+ 129  0042 cd0000        	call	c_ltor
+ 131  0045 ae0014        	ldw	x,#L55
+ 132  0048 cd0000        	call	c_fmul
+ 134  004b 96            	ldw	x,sp
+ 135  004c 1c000b        	addw	x,#OFST+3
+ 136  004f cd0000        	call	c_fcmp
+ 138  0052 2e0c          	jrsge	L74
+ 139                     ; 15 	steps+=1;
+ 141  0054 a601          	ld	a,#1
+ 142  0056 cd0000        	call	c_ctof
+ 144  0059 96            	ldw	x,sp
+ 145  005a 1c0005        	addw	x,#OFST-3
+ 146  005d cd0000        	call	c_fgadd
+ 149  0060               L74:
+ 150                     ; 18 }
+ 153  0060 5b08          	addw	sp,#8
+ 154  0062 81            	ret
+ 224                     .const:	section	.text
+ 225  0000               L01:
+ 226  0000 00010001      	dc.l	65537
+ 227                     ; 20 uint16_t determineMinPsc(float desiredTime, float freqPeriod) {
+ 228                     	switch	.text
+ 229  0063               _determineMinPsc:
+ 231  0063 520a          	subw	sp,#10
+ 232       0000000a      OFST:	set	10
+ 235                     ; 22 	uint16_t psc = 1;
+ 237  0065 ae0001        	ldw	x,#1
+ 238  0068 1f05          	ldw	(OFST-5,sp),x
+ 240                     ; 23 	float temp = 0;
+ 242  006a               L711:
+ 243                     ; 26 		temp = freqPeriod * psc;
+ 245  006a 1e05          	ldw	x,(OFST-5,sp)
+ 246  006c cd0000        	call	c_uitof
+ 248  006f 96            	ldw	x,sp
+ 249  0070 1c0001        	addw	x,#OFST-9
+ 250  0073 cd0000        	call	c_rtol
+ 253  0076 96            	ldw	x,sp
+ 254  0077 1c0011        	addw	x,#OFST+7
+ 255  007a cd0000        	call	c_ltor
+ 257  007d 96            	ldw	x,sp
+ 258  007e 1c0001        	addw	x,#OFST-9
+ 259  0081 cd0000        	call	c_fmul
+ 261  0084 96            	ldw	x,sp
+ 262  0085 1c0007        	addw	x,#OFST-3
+ 263  0088 cd0000        	call	c_rtol
+ 266                     ; 27 		ticks = (desiredTime/temp);
+ 268  008b 96            	ldw	x,sp
+ 269  008c 1c000d        	addw	x,#OFST+3
+ 270  008f cd0000        	call	c_ltor
+ 272  0092 96            	ldw	x,sp
+ 273  0093 1c0007        	addw	x,#OFST-3
+ 274  0096 cd0000        	call	c_fdiv
+ 276  0099 cd0000        	call	c_ftol
+ 278  009c 96            	ldw	x,sp
+ 279  009d 1c0007        	addw	x,#OFST-3
+ 280  00a0 cd0000        	call	c_rtol
+ 283                     ; 28 		if(ticks > 65536)
+ 285  00a3 9c            	rvf
+ 286  00a4 96            	ldw	x,sp
+ 287  00a5 1c0007        	addw	x,#OFST-3
+ 288  00a8 cd0000        	call	c_ltor
+ 290  00ab ae0000        	ldw	x,#L01
+ 291  00ae cd0000        	call	c_lcmp
+ 293  00b1 2f07          	jrslt	L121
+ 294                     ; 29 			psc++;
+ 296  00b3 1e05          	ldw	x,(OFST-5,sp)
+ 297  00b5 1c0001        	addw	x,#1
+ 298  00b8 1f05          	ldw	(OFST-5,sp),x
+ 300  00ba               L121:
+ 301                     ; 30 	}while(ticks > 65536);
+ 303  00ba 9c            	rvf
+ 304  00bb 96            	ldw	x,sp
+ 305  00bc 1c0007        	addw	x,#OFST-3
+ 306  00bf cd0000        	call	c_ltor
+ 308  00c2 ae0000        	ldw	x,#L01
+ 309  00c5 cd0000        	call	c_lcmp
+ 311  00c8 2ea0          	jrsge	L711
+ 312                     ; 32 	return psc;
+ 314  00ca 1e05          	ldw	x,(OFST-5,sp)
+ 317  00cc 5b0a          	addw	sp,#10
+ 318  00ce 81            	ret
+ 379                     ; 35 uint16_t determineArr(float desiredTime, float freqPeriod,  uint16_t psc) {
+ 380                     	switch	.text
+ 381  00cf               _determineArr:
+ 383  00cf 520a          	subw	sp,#10
+ 384       0000000a      OFST:	set	10
+ 387                     ; 38 	arr = (uint16_t)(desiredTime/(freqPeriod*psc));
+ 389  00d1 1e15          	ldw	x,(OFST+11,sp)
+ 390  00d3 cd0000        	call	c_uitof
+ 392  00d6 96            	ldw	x,sp
+ 393  00d7 1c0005        	addw	x,#OFST-5
+ 394  00da cd0000        	call	c_rtol
+ 397  00dd 96            	ldw	x,sp
+ 398  00de 1c0011        	addw	x,#OFST+7
+ 399  00e1 cd0000        	call	c_ltor
+ 401  00e4 96            	ldw	x,sp
+ 402  00e5 1c0005        	addw	x,#OFST-5
+ 403  00e8 cd0000        	call	c_fmul
+ 405  00eb 96            	ldw	x,sp
+ 406  00ec 1c0001        	addw	x,#OFST-9
+ 407  00ef cd0000        	call	c_rtol
+ 410  00f2 96            	ldw	x,sp
+ 411  00f3 1c000d        	addw	x,#OFST+3
+ 412  00f6 cd0000        	call	c_ltor
+ 414  00f9 96            	ldw	x,sp
+ 415  00fa 1c0001        	addw	x,#OFST-9
+ 416  00fd cd0000        	call	c_fdiv
+ 418  0100 cd0000        	call	c_ftoi
+ 420  0103 1f09          	ldw	(OFST-1,sp),x
+ 422                     ; 39 	return arr;
+ 424  0105 1e09          	ldw	x,(OFST-1,sp)
+ 427  0107 5b0a          	addw	sp,#10
+ 428  0109 81            	ret
+ 480                     ; 42 uint16_t determineOCValue(float arr, double dutyCycle) {
+ 481                     	switch	.text
+ 482  010a               _determineOCValue:
+ 484  010a 5206          	subw	sp,#6
+ 485       00000006      OFST:	set	6
+ 488                     ; 45 	if(dutyCycle < 1 && dutyCycle > 0) {
+ 490  010c 9c            	rvf
+ 491  010d a601          	ld	a,#1
+ 492  010f cd0000        	call	c_ctof
+ 494  0112 96            	ldw	x,sp
+ 495  0113 1c0001        	addw	x,#OFST-5
+ 496  0116 cd0000        	call	c_rtol
+ 499  0119 96            	ldw	x,sp
+ 500  011a 1c000d        	addw	x,#OFST+7
+ 501  011d cd0000        	call	c_ltor
+ 503  0120 96            	ldw	x,sp
+ 504  0121 1c0001        	addw	x,#OFST-5
+ 505  0124 cd0000        	call	c_fcmp
+ 507  0127 2e1d          	jrsge	L702
+ 509  0129 9c            	rvf
+ 510  012a 9c            	rvf
+ 511  012b 0d0d          	tnz	(OFST+7,sp)
+ 512  012d 2d17          	jrsle	L702
+ 513                     ; 46 		OCValue = (uint16_t)(arr * dutyCycle);
+ 515  012f 96            	ldw	x,sp
+ 516  0130 1c0009        	addw	x,#OFST+3
+ 517  0133 cd0000        	call	c_ltor
+ 519  0136 96            	ldw	x,sp
+ 520  0137 1c000d        	addw	x,#OFST+7
+ 521  013a cd0000        	call	c_fmul
+ 523  013d cd0000        	call	c_ftoi
+ 525  0140 1f05          	ldw	(OFST-1,sp),x
+ 527                     ; 47 		return OCValue;
+ 529  0142 1e05          	ldw	x,(OFST-1,sp)
+ 531  0144 203e          	jra	L61
+ 532  0146               L702:
+ 533                     ; 50 	else if(dutyCycle < 100 && dutyCycle > 0) {
+ 535  0146 9c            	rvf
+ 536  0147 a664          	ld	a,#100
+ 537  0149 cd0000        	call	c_ctof
+ 539  014c 96            	ldw	x,sp
+ 540  014d 1c0001        	addw	x,#OFST-5
+ 541  0150 cd0000        	call	c_rtol
+ 544  0153 96            	ldw	x,sp
+ 545  0154 1c000d        	addw	x,#OFST+7
+ 546  0157 cd0000        	call	c_ltor
+ 548  015a 96            	ldw	x,sp
+ 549  015b 1c0001        	addw	x,#OFST-5
+ 550  015e cd0000        	call	c_fcmp
+ 552  0161 2e24          	jrsge	L312
+ 554  0163 9c            	rvf
+ 555  0164 9c            	rvf
+ 556  0165 0d0d          	tnz	(OFST+7,sp)
+ 557  0167 2d1e          	jrsle	L312
+ 558                     ; 51 		OCValue = (uint16_t)(arr * (dutyCycle / 100));
+ 560  0169 96            	ldw	x,sp
+ 561  016a 1c000d        	addw	x,#OFST+7
+ 562  016d cd0000        	call	c_ltor
+ 564  0170 ae0010        	ldw	x,#L122
+ 565  0173 cd0000        	call	c_fdiv
+ 567  0176 96            	ldw	x,sp
+ 568  0177 1c0009        	addw	x,#OFST+3
+ 569  017a cd0000        	call	c_fmul
+ 571  017d cd0000        	call	c_ftoi
+ 573  0180 1f05          	ldw	(OFST-1,sp),x
+ 575                     ; 52 		return OCValue;
+ 577  0182 1e05          	ldw	x,(OFST-1,sp)
+ 579  0184               L61:
+ 581  0184 5b06          	addw	sp,#6
+ 582  0186 81            	ret
+ 583  0187               L312:
+ 584                     ; 56 		return arr/2;
+ 586  0187 96            	ldw	x,sp
+ 587  0188 1c0009        	addw	x,#OFST+3
+ 588  018b cd0000        	call	c_ltor
+ 590  018e ae000c        	ldw	x,#L332
+ 591  0191 cd0000        	call	c_fdiv
+ 593  0194 cd0000        	call	c_ftoi
+ 596  0197 20eb          	jra	L61
+ 678                     ; 59 void tim1SetValues(uint16_t arr, uint16_t psc, uint16_t cnt) {
  679                     	switch	.text
- 680  018b               _tim1OCSetValue:
- 682  018b 5206          	subw	sp,#6
- 683       00000006      OFST:	set	6
- 686                     ; 71 	IoRegister *ccr = &TIM1->CCR1H;
- 688  018d ae5265        	ldw	x,#21093
- 689  0190 1f05          	ldw	(OFST-1,sp),x
- 691                     ; 73 	ccr += ((channel - 1) * 2);
- 693  0192 96            	ldw	x,sp
- 694  0193 1c0009        	addw	x,#OFST+3
- 695  0196 cd0000        	call	c_ltor
- 697  0199 3803          	sll	c_lreg+3
- 698  019b 3902          	rlc	c_lreg+2
- 699  019d 3901          	rlc	c_lreg+1
- 700  019f 3900          	rlc	c_lreg
- 701  01a1 a602          	ld	a,#2
- 702  01a3 cd0000        	call	c_lsbc
- 704  01a6 96            	ldw	x,sp
- 705  01a7 1c0001        	addw	x,#OFST-5
- 706  01aa cd0000        	call	c_rtol
- 709  01ad 1e05          	ldw	x,(OFST-1,sp)
- 710  01af cd0000        	call	c_uitolx
- 712  01b2 96            	ldw	x,sp
- 713  01b3 1c0001        	addw	x,#OFST-5
- 714  01b6 cd0000        	call	c_ladd
- 716  01b9 be02          	ldw	x,c_lreg+2
- 717  01bb 1f05          	ldw	(OFST-1,sp),x
- 719                     ; 75 	*ccr &= 0x00;
- 721  01bd 1e05          	ldw	x,(OFST-1,sp)
- 722  01bf 7f            	clr	(x)
- 723                     ; 76 	*ccr = ((0xff00 & compareValue) >> 8);
- 725  01c0 7b0d          	ld	a,(OFST+7,sp)
- 726  01c2 1e05          	ldw	x,(OFST-1,sp)
- 727  01c4 f7            	ld	(x),a
- 728                     ; 77 	ccr++;
- 730  01c5 1e05          	ldw	x,(OFST-1,sp)
- 731  01c7 1c0001        	addw	x,#1
- 732  01ca 1f05          	ldw	(OFST-1,sp),x
- 734                     ; 78 	*ccr = (0x00ff & compareValue);
- 736  01cc 7b0e          	ld	a,(OFST+8,sp)
- 737  01ce a4ff          	and	a,#255
- 738  01d0 1e05          	ldw	x,(OFST-1,sp)
- 739  01d2 f7            	ld	(x),a
- 740                     ; 79 }
- 743  01d3 5b06          	addw	sp,#6
- 744  01d5 81            	ret
- 797                     ; 81 void tim1OCSetMode(uint32_t channel, uint32_t mode) {
- 798                     	switch	.text
- 799  01d6               _tim1OCSetMode:
- 801  01d6 5206          	subw	sp,#6
- 802       00000006      OFST:	set	6
- 805                     ; 82 	IoRegister *ccmr = &TIM1->CCMR1;
- 807  01d8 ae5258        	ldw	x,#21080
- 808  01db 1f05          	ldw	(OFST-1,sp),x
- 810                     ; 84 	ccmr += (channel - 1);
- 812  01dd 96            	ldw	x,sp
- 813  01de 1c0009        	addw	x,#OFST+3
- 814  01e1 cd0000        	call	c_ltor
- 816  01e4 a601          	ld	a,#1
- 817  01e6 cd0000        	call	c_lsbc
- 819  01e9 96            	ldw	x,sp
- 820  01ea 1c0001        	addw	x,#OFST-5
- 821  01ed cd0000        	call	c_rtol
- 824  01f0 1e05          	ldw	x,(OFST-1,sp)
- 825  01f2 cd0000        	call	c_uitolx
+ 680  0199               _tim1SetValues:
+ 682  0199 89            	pushw	x
+ 683  019a 5206          	subw	sp,#6
+ 684       00000006      OFST:	set	6
+ 687                     ; 60 	IoRegister *tim_arr = &TIM1->ARRH;
+ 689  019c ae5262        	ldw	x,#21090
+ 690  019f 1f01          	ldw	(OFST-5,sp),x
+ 692                     ; 61 	IoRegister *tim_psc = &TIM1->PSCRH;
+ 694  01a1 ae5260        	ldw	x,#21088
+ 695  01a4 1f03          	ldw	(OFST-3,sp),x
+ 697                     ; 62 	IoRegister *tim_cnt = &TIM1->CNTRH;
+ 699  01a6 ae525e        	ldw	x,#21086
+ 700  01a9 1f05          	ldw	(OFST-1,sp),x
+ 702                     ; 64 	psc -= 1;
+ 704  01ab 1e0b          	ldw	x,(OFST+5,sp)
+ 705  01ad 1d0001        	subw	x,#1
+ 706  01b0 1f0b          	ldw	(OFST+5,sp),x
+ 707                     ; 66 	*tim_arr = ((0xff00 & arr) >> 8);
+ 709  01b2 7b07          	ld	a,(OFST+1,sp)
+ 710  01b4 c75262        	ld	21090,a
+ 711                     ; 67 	*tim_psc = ((0xff00 & psc) >> 8);
+ 713  01b7 7b0b          	ld	a,(OFST+5,sp)
+ 714  01b9 c75260        	ld	21088,a
+ 715                     ; 68 	*tim_cnt = ((0xff00 & cnt) >> 8);
+ 717  01bc 7b0d          	ld	a,(OFST+7,sp)
+ 718  01be c7525e        	ld	21086,a
+ 719                     ; 69 	tim_arr++;
+ 721  01c1 1e01          	ldw	x,(OFST-5,sp)
+ 722  01c3 1c0001        	addw	x,#1
+ 723  01c6 1f01          	ldw	(OFST-5,sp),x
+ 725                     ; 70 	tim_psc++;
+ 727  01c8 1e03          	ldw	x,(OFST-3,sp)
+ 728  01ca 1c0001        	addw	x,#1
+ 729  01cd 1f03          	ldw	(OFST-3,sp),x
+ 731                     ; 71 	tim_cnt++;
+ 733  01cf 1e05          	ldw	x,(OFST-1,sp)
+ 734  01d1 1c0001        	addw	x,#1
+ 735  01d4 1f05          	ldw	(OFST-1,sp),x
+ 737                     ; 72 	*tim_arr = (0x00ff & arr);
+ 739  01d6 7b08          	ld	a,(OFST+2,sp)
+ 740  01d8 a4ff          	and	a,#255
+ 741  01da 1e01          	ldw	x,(OFST-5,sp)
+ 742  01dc f7            	ld	(x),a
+ 743                     ; 73 	*tim_psc = (0x00ff & psc);
+ 745  01dd 7b0c          	ld	a,(OFST+6,sp)
+ 746  01df a4ff          	and	a,#255
+ 747  01e1 1e03          	ldw	x,(OFST-3,sp)
+ 748  01e3 f7            	ld	(x),a
+ 749                     ; 74 	*tim_cnt = (0x00ff & cnt);
+ 751  01e4 7b0e          	ld	a,(OFST+8,sp)
+ 752  01e6 a4ff          	and	a,#255
+ 753  01e8 1e05          	ldw	x,(OFST-1,sp)
+ 754  01ea f7            	ld	(x),a
+ 755                     ; 75 }
+ 758  01eb 5b08          	addw	sp,#8
+ 759  01ed 81            	ret
+ 812                     ; 77 void tim1OCSetValue(uint32_t channel, uint16_t compareValue) {
+ 813                     	switch	.text
+ 814  01ee               _tim1OCSetValue:
+ 816  01ee 5206          	subw	sp,#6
+ 817       00000006      OFST:	set	6
+ 820                     ; 78 	IoRegister *ccr = &TIM1->CCR1H;
+ 822  01f0 ae5265        	ldw	x,#21093
+ 823  01f3 1f05          	ldw	(OFST-1,sp),x
+ 825                     ; 80 	ccr += ((channel - 1) * 2);
  827  01f5 96            	ldw	x,sp
- 828  01f6 1c0001        	addw	x,#OFST-5
- 829  01f9 cd0000        	call	c_ladd
- 831  01fc be02          	ldw	x,c_lreg+2
- 832  01fe 1f05          	ldw	(OFST-1,sp),x
- 834                     ; 86 	*ccmr &= ~(1 << 4);
- 836  0200 1e05          	ldw	x,(OFST-1,sp)
- 837  0202 f6            	ld	a,(x)
- 838  0203 a4ef          	and	a,#239
- 839  0205 f7            	ld	(x),a
- 840                     ; 87 	*ccmr |= (mode << 4);
- 842  0206 1e05          	ldw	x,(OFST-1,sp)
- 843  0208 7b10          	ld	a,(OFST+10,sp)
- 844  020a 4e            	swap	a
- 845  020b a4f0          	and	a,#240
- 846  020d fa            	or	a,(x)
- 847  020e f7            	ld	(x),a
- 848                     ; 88 }
- 851  020f 5b06          	addw	sp,#6
- 852  0211 81            	ret
- 936                     ; 90 void setTim1OCPeriod(float desiredTime, double dutyCycle, float freqPeriod) {
- 937                     	switch	.text
- 938  0212               _setTim1OCPeriod:
- 940  0212 520c          	subw	sp,#12
- 941       0000000c      OFST:	set	12
- 944                     ; 93 	psc = determineMinPsc(desiredTime, freqPeriod);
- 946  0214 1e19          	ldw	x,(OFST+13,sp)
- 947  0216 89            	pushw	x
- 948  0217 1e19          	ldw	x,(OFST+13,sp)
- 949  0219 89            	pushw	x
- 950  021a 1e15          	ldw	x,(OFST+9,sp)
- 951  021c 89            	pushw	x
- 952  021d 1e15          	ldw	x,(OFST+9,sp)
- 953  021f 89            	pushw	x
- 954  0220 cd0000        	call	_determineMinPsc
- 956  0223 5b08          	addw	sp,#8
- 957  0225 cd0000        	call	c_uitolx
- 959  0228 96            	ldw	x,sp
- 960  0229 1c0005        	addw	x,#OFST-7
- 961  022c cd0000        	call	c_rtol
- 964                     ; 94 	arr = determineArr(desiredTime, freqPeriod, psc);
- 966  022f 1e07          	ldw	x,(OFST-5,sp)
- 967  0231 89            	pushw	x
- 968  0232 1e1b          	ldw	x,(OFST+15,sp)
- 969  0234 89            	pushw	x
- 970  0235 1e1b          	ldw	x,(OFST+15,sp)
- 971  0237 89            	pushw	x
- 972  0238 1e17          	ldw	x,(OFST+11,sp)
- 973  023a 89            	pushw	x
- 974  023b 1e17          	ldw	x,(OFST+11,sp)
- 975  023d 89            	pushw	x
- 976  023e cd006c        	call	_determineArr
- 978  0241 5b0a          	addw	sp,#10
- 979  0243 cd0000        	call	c_uitolx
- 981  0246 96            	ldw	x,sp
- 982  0247 1c0009        	addw	x,#OFST-3
- 983  024a cd0000        	call	c_rtol
- 986                     ; 95 	ocValue = determineOCValue(arr, dutyCycle);
- 988  024d 1e15          	ldw	x,(OFST+9,sp)
- 989  024f 89            	pushw	x
- 990  0250 1e15          	ldw	x,(OFST+9,sp)
- 991  0252 89            	pushw	x
- 992  0253 96            	ldw	x,sp
- 993  0254 1c000d        	addw	x,#OFST+1
- 994  0257 cd0000        	call	c_ltor
- 996  025a cd0000        	call	c_ultof
- 998  025d be02          	ldw	x,c_lreg+2
- 999  025f 89            	pushw	x
-1000  0260 be00          	ldw	x,c_lreg
-1001  0262 89            	pushw	x
-1002  0263 cd00a7        	call	_determineOCValue
-1004  0266 5b08          	addw	sp,#8
-1005  0268 cd0000        	call	c_uitolx
-1007  026b 96            	ldw	x,sp
-1008  026c 1c0001        	addw	x,#OFST-11
-1009  026f cd0000        	call	c_rtol
-1012                     ; 97 	tim1SetValues(arr, psc, 0);
-1014  0272 5f            	clrw	x
-1015  0273 89            	pushw	x
-1016  0274 1e09          	ldw	x,(OFST-3,sp)
-1017  0276 89            	pushw	x
-1018  0277 1e0f          	ldw	x,(OFST+3,sp)
-1019  0279 cd0136        	call	_tim1SetValues
-1021  027c 5b04          	addw	sp,#4
-1022                     ; 98 	tim1OCSetValue(TIM_CH2, ocValue);
-1024  027e 1e03          	ldw	x,(OFST-9,sp)
-1025  0280 89            	pushw	x
-1026  0281 ae0002        	ldw	x,#2
-1027  0284 89            	pushw	x
-1028  0285 ae0000        	ldw	x,#0
-1029  0288 89            	pushw	x
-1030  0289 cd018b        	call	_tim1OCSetValue
-1032  028c 5b06          	addw	sp,#6
-1033                     ; 99 }
-1036  028e 5b0c          	addw	sp,#12
-1037  0290 81            	ret
-1117                     ; 101 void setTim1Freq(uint32_t desiredFreq, double dutyCycle) {
-1118                     	switch	.text
-1119  0291               _setTim1Freq:
-1121  0291 520e          	subw	sp,#14
-1122       0000000e      OFST:	set	14
-1125                     ; 105 	int clkdivr = ((CLK->CKDIVR & 0x18) >> 3);
-1127  0293 c650c6        	ld	a,20678
-1128  0296 44            	srl	a
-1129  0297 44            	srl	a
-1130  0298 44            	srl	a
-1131  0299 5f            	clrw	x
-1132  029a a403          	and	a,#3
-1133  029c 5f            	clrw	x
-1134  029d 5f            	clrw	x
-1135  029e 97            	ld	xl,a
-1136  029f 1f09          	ldw	(OFST-5,sp),x
-1138                     ; 107 	switch(clkdivr) {
-1140  02a1 1e09          	ldw	x,(OFST-5,sp)
-1142                     ; 112 		default: systemClkFreq = 2000000;break;
-1143  02a3 5d            	tnzw	x
-1144  02a4 2715          	jreq	L743
-1145  02a6 5a            	decw	x
-1146  02a7 271e          	jreq	L153
-1147  02a9 5a            	decw	x
-1148  02aa 2727          	jreq	L353
-1149  02ac 5a            	decw	x
-1150  02ad 2730          	jreq	L553
-1151  02af               L753:
-1154  02af ae8480        	ldw	x,#33920
-1155  02b2 1f0d          	ldw	(OFST-1,sp),x
-1156  02b4 ae001e        	ldw	x,#30
-1157  02b7 1f0b          	ldw	(OFST-3,sp),x
-1161  02b9 202e          	jra	L524
-1162  02bb               L743:
-1163                     ; 108 		case 0 : systemClkFreq = 16000000;break;
-1165  02bb ae2400        	ldw	x,#9216
-1166  02be 1f0d          	ldw	(OFST-1,sp),x
-1167  02c0 ae00f4        	ldw	x,#244
-1168  02c3 1f0b          	ldw	(OFST-3,sp),x
-1172  02c5 2022          	jra	L524
-1173  02c7               L153:
-1174                     ; 109 		case 1 : systemClkFreq = 8000000;break;
-1176  02c7 ae1200        	ldw	x,#4608
-1177  02ca 1f0d          	ldw	(OFST-1,sp),x
-1178  02cc ae007a        	ldw	x,#122
-1179  02cf 1f0b          	ldw	(OFST-3,sp),x
-1183  02d1 2016          	jra	L524
-1184  02d3               L353:
-1185                     ; 110 		case 2 : systemClkFreq = 4000000;break;
-1187  02d3 ae0900        	ldw	x,#2304
-1188  02d6 1f0d          	ldw	(OFST-1,sp),x
-1189  02d8 ae003d        	ldw	x,#61
-1190  02db 1f0b          	ldw	(OFST-3,sp),x
-1194  02dd 200a          	jra	L524
-1195  02df               L553:
-1196                     ; 111 		case 3 : systemClkFreq = 2000000;break;
-1198  02df ae8480        	ldw	x,#33920
-1199  02e2 1f0d          	ldw	(OFST-1,sp),x
-1200  02e4 ae001e        	ldw	x,#30
-1201  02e7 1f0b          	ldw	(OFST-3,sp),x
-1205  02e9               L524:
-1206                     ; 114 	desiredTime = (1/(float)desiredFreq);
-1208  02e9 96            	ldw	x,sp
-1209  02ea 1c0011        	addw	x,#OFST+3
-1210  02ed cd0000        	call	c_ltor
-1212  02f0 cd0000        	call	c_ultof
-1214  02f3 96            	ldw	x,sp
-1215  02f4 1c0001        	addw	x,#OFST-13
-1216  02f7 cd0000        	call	c_rtol
-1219  02fa a601          	ld	a,#1
-1220  02fc cd0000        	call	c_ctof
-1222  02ff 96            	ldw	x,sp
-1223  0300 1c0001        	addw	x,#OFST-13
-1224  0303 cd0000        	call	c_fdiv
-1226  0306 96            	ldw	x,sp
-1227  0307 1c0005        	addw	x,#OFST-9
-1228  030a cd0000        	call	c_rtol
-1231                     ; 115 	freqPeriod = (1/(float)systemClkFreq);
-1233  030d 96            	ldw	x,sp
-1234  030e 1c000b        	addw	x,#OFST-3
-1235  0311 cd0000        	call	c_ltor
-1237  0314 cd0000        	call	c_ultof
-1239  0317 96            	ldw	x,sp
-1240  0318 1c0001        	addw	x,#OFST-13
-1241  031b cd0000        	call	c_rtol
-1244  031e a601          	ld	a,#1
-1245  0320 cd0000        	call	c_ctof
-1247  0323 96            	ldw	x,sp
-1248  0324 1c0001        	addw	x,#OFST-13
-1249  0327 cd0000        	call	c_fdiv
-1251  032a 96            	ldw	x,sp
-1252  032b 1c000b        	addw	x,#OFST-3
-1253  032e cd0000        	call	c_rtol
-1256                     ; 116 	setTim1OCPeriod(desiredTime, dutyCycle, freqPeriod);
-1258  0331 1e0d          	ldw	x,(OFST-1,sp)
-1259  0333 89            	pushw	x
-1260  0334 1e0d          	ldw	x,(OFST-1,sp)
-1261  0336 89            	pushw	x
-1262  0337 1e1b          	ldw	x,(OFST+13,sp)
-1263  0339 89            	pushw	x
-1264  033a 1e1b          	ldw	x,(OFST+13,sp)
-1265  033c 89            	pushw	x
-1266  033d 1e0f          	ldw	x,(OFST+1,sp)
-1267  033f 89            	pushw	x
-1268  0340 1e0f          	ldw	x,(OFST+1,sp)
-1269  0342 89            	pushw	x
-1270  0343 cd0212        	call	_setTim1OCPeriod
-1272  0346 5b0c          	addw	sp,#12
-1273                     ; 117 }
-1276  0348 5b0e          	addw	sp,#14
-1277  034a 81            	ret
-1321                     	switch	.const
-1322  0004               L23:
-1323  0004 00000003      	dc.l	3
-1324  0008               L43:
-1325  0008 00000005      	dc.l	5
-1326                     ; 119 void tim1InitOC(uint32_t channel, uint32_t mode) {
-1327                     	switch	.text
-1328  034b               _tim1InitOC:
-1330       00000000      OFST:	set	0
-1333                     ; 120 	TIM1_ENABLE_CLK_GATING();
-1335  034b 358050c7      	mov	20679,#128
-1336                     ; 121 	tim1OCSetMode(channel, mode);
-1338  034f 1e09          	ldw	x,(OFST+9,sp)
-1339  0351 89            	pushw	x
-1340  0352 1e09          	ldw	x,(OFST+9,sp)
-1341  0354 89            	pushw	x
-1342  0355 1e09          	ldw	x,(OFST+9,sp)
-1343  0357 89            	pushw	x
-1344  0358 1e09          	ldw	x,(OFST+9,sp)
-1345  035a 89            	pushw	x
-1346  035b cd01d6        	call	_tim1OCSetMode
-1348  035e 5b08          	addw	sp,#8
-1349                     ; 123 	if(channel > 2 && channel < 5)
-1351  0360 96            	ldw	x,sp
-1352  0361 1c0003        	addw	x,#OFST+3
-1353  0364 cd0000        	call	c_ltor
-1355  0367 ae0004        	ldw	x,#L23
-1356  036a cd0000        	call	c_lcmp
-1358  036d 2529          	jrult	L154
-1360  036f 96            	ldw	x,sp
-1361  0370 1c0003        	addw	x,#OFST+3
-1362  0373 cd0000        	call	c_ltor
-1364  0376 ae0008        	ldw	x,#L43
-1365  0379 cd0000        	call	c_lcmp
-1367  037c 241a          	jruge	L154
-1368                     ; 124 		TIM1->CCER2 |= (5 << (((channel) - 3) *4));
-1370  037e 7b06          	ld	a,(OFST+6,sp)
-1371  0380 48            	sll	a
-1372  0381 48            	sll	a
-1373  0382 5f            	clrw	x
-1374  0383 97            	ld	xl,a
-1375  0384 1d000c        	subw	x,#12
-1376  0387 a605          	ld	a,#5
-1377  0389 5d            	tnzw	x
-1378  038a 2704          	jreq	L63
-1379  038c               L04:
-1380  038c 48            	sll	a
-1381  038d 5a            	decw	x
-1382  038e 26fc          	jrne	L04
-1383  0390               L63:
-1384  0390 ca525d        	or	a,21085
-1385  0393 c7525d        	ld	21085,a
-1387  0396 2030          	jra	L354
-1388  0398               L154:
-1389                     ; 126 	else if(channel > 0 && channel < 3)
-1391  0398 96            	ldw	x,sp
-1392  0399 1c0003        	addw	x,#OFST+3
-1393  039c cd0000        	call	c_lzmp
-1395  039f 272c          	jreq	L554
-1397  03a1 96            	ldw	x,sp
-1398  03a2 1c0003        	addw	x,#OFST+3
-1399  03a5 cd0000        	call	c_ltor
-1401  03a8 ae0004        	ldw	x,#L23
-1402  03ab cd0000        	call	c_lcmp
-1404  03ae 241d          	jruge	L554
-1405                     ; 127 		TIM1->CCER1 |= (5 << (((channel) - 1) *4));
-1407  03b0 7b06          	ld	a,(OFST+6,sp)
-1408  03b2 48            	sll	a
-1409  03b3 48            	sll	a
-1410  03b4 5f            	clrw	x
-1411  03b5 97            	ld	xl,a
-1412  03b6 1d0004        	subw	x,#4
-1413  03b9 a605          	ld	a,#5
-1414  03bb 5d            	tnzw	x
-1415  03bc 2704          	jreq	L24
-1416  03be               L44:
-1417  03be 48            	sll	a
-1418  03bf 5a            	decw	x
-1419  03c0 26fc          	jrne	L44
-1420  03c2               L24:
-1421  03c2 ca525c        	or	a,21084
-1422  03c5 c7525c        	ld	21084,a
-1424  03c8               L354:
-1425                     ; 131 	TIM1_MOE_ENABLE();
-1427  03c8 721e526d      	bset	21101,#7
-1428                     ; 132 }
-1431  03cc 81            	ret
-1432  03cd               L554:
-1433                     ; 130 		return;
-1436  03cd 81            	ret
-1449                     	xdef	_tim1InitOC
-1450                     	xdef	_tim1OCSetValue
-1451                     	xdef	_tim1OCSetMode
-1452                     	xdef	_tim1SetValues
-1453                     	xdef	_setTim1OCPeriod
-1454                     	xdef	_setTim1Freq
-1455                     	xdef	_determineMinPsc
-1456                     	xdef	_determineArr
-1457                     	xdef	_determineOCValue
-1458                     	switch	.const
-1459  000c               L361:
-1460  000c 40000000      	dc.w	16384,0
-1461  0010               L151:
-1462  0010 42c80000      	dc.w	17096,0
-1463                     	xref.b	c_lreg
-1464                     	xref.b	c_x
-1484                     	xref	c_lzmp
-1485                     	xref	c_ultof
-1486                     	xref	c_ladd
-1487                     	xref	c_lsbc
-1488                     	xref	c_uitolx
-1489                     	xref	c_fcmp
-1490                     	xref	c_ctof
-1491                     	xref	c_ftoi
-1492                     	xref	c_lcmp
-1493                     	xref	c_ftol
-1494                     	xref	c_fdiv
-1495                     	xref	c_fmul
-1496                     	xref	c_rtol
-1497                     	xref	c_uitof
-1498                     	xref	c_ltor
-1499                     	end
+ 828  01f6 1c0009        	addw	x,#OFST+3
+ 829  01f9 cd0000        	call	c_ltor
+ 831  01fc 3803          	sll	c_lreg+3
+ 832  01fe 3902          	rlc	c_lreg+2
+ 833  0200 3901          	rlc	c_lreg+1
+ 834  0202 3900          	rlc	c_lreg
+ 835  0204 a602          	ld	a,#2
+ 836  0206 cd0000        	call	c_lsbc
+ 838  0209 96            	ldw	x,sp
+ 839  020a 1c0001        	addw	x,#OFST-5
+ 840  020d cd0000        	call	c_rtol
+ 843  0210 1e05          	ldw	x,(OFST-1,sp)
+ 844  0212 cd0000        	call	c_uitolx
+ 846  0215 96            	ldw	x,sp
+ 847  0216 1c0001        	addw	x,#OFST-5
+ 848  0219 cd0000        	call	c_ladd
+ 850  021c be02          	ldw	x,c_lreg+2
+ 851  021e 1f05          	ldw	(OFST-1,sp),x
+ 853                     ; 82 	*ccr &= 0x00;
+ 855  0220 1e05          	ldw	x,(OFST-1,sp)
+ 856  0222 7f            	clr	(x)
+ 857                     ; 83 	*ccr = ((0xff00 & compareValue) >> 8);
+ 859  0223 7b0d          	ld	a,(OFST+7,sp)
+ 860  0225 1e05          	ldw	x,(OFST-1,sp)
+ 861  0227 f7            	ld	(x),a
+ 862                     ; 84 	ccr++;
+ 864  0228 1e05          	ldw	x,(OFST-1,sp)
+ 865  022a 1c0001        	addw	x,#1
+ 866  022d 1f05          	ldw	(OFST-1,sp),x
+ 868                     ; 85 	*ccr = (0x00ff & compareValue);
+ 870  022f 7b0e          	ld	a,(OFST+8,sp)
+ 871  0231 a4ff          	and	a,#255
+ 872  0233 1e05          	ldw	x,(OFST-1,sp)
+ 873  0235 f7            	ld	(x),a
+ 874                     ; 86 }
+ 877  0236 5b06          	addw	sp,#6
+ 878  0238 81            	ret
+ 931                     ; 88 void tim1OCSetMode(uint32_t channel, uint32_t mode) {
+ 932                     	switch	.text
+ 933  0239               _tim1OCSetMode:
+ 935  0239 5206          	subw	sp,#6
+ 936       00000006      OFST:	set	6
+ 939                     ; 89 	IoRegister *ccmr = &TIM1->CCMR1;
+ 941  023b ae5258        	ldw	x,#21080
+ 942  023e 1f05          	ldw	(OFST-1,sp),x
+ 944                     ; 91 	ccmr += (channel - 1);
+ 946  0240 96            	ldw	x,sp
+ 947  0241 1c0009        	addw	x,#OFST+3
+ 948  0244 cd0000        	call	c_ltor
+ 950  0247 a601          	ld	a,#1
+ 951  0249 cd0000        	call	c_lsbc
+ 953  024c 96            	ldw	x,sp
+ 954  024d 1c0001        	addw	x,#OFST-5
+ 955  0250 cd0000        	call	c_rtol
+ 958  0253 1e05          	ldw	x,(OFST-1,sp)
+ 959  0255 cd0000        	call	c_uitolx
+ 961  0258 96            	ldw	x,sp
+ 962  0259 1c0001        	addw	x,#OFST-5
+ 963  025c cd0000        	call	c_ladd
+ 965  025f be02          	ldw	x,c_lreg+2
+ 966  0261 1f05          	ldw	(OFST-1,sp),x
+ 968                     ; 93 	*ccmr &= ~(1 << 4);
+ 970  0263 1e05          	ldw	x,(OFST-1,sp)
+ 971  0265 f6            	ld	a,(x)
+ 972  0266 a4ef          	and	a,#239
+ 973  0268 f7            	ld	(x),a
+ 974                     ; 94 	*ccmr |= (mode << 4);
+ 976  0269 1e05          	ldw	x,(OFST-1,sp)
+ 977  026b 7b10          	ld	a,(OFST+10,sp)
+ 978  026d 4e            	swap	a
+ 979  026e a4f0          	and	a,#240
+ 980  0270 fa            	or	a,(x)
+ 981  0271 f7            	ld	(x),a
+ 982                     ; 95 }
+ 985  0272 5b06          	addw	sp,#6
+ 986  0274 81            	ret
+1070                     ; 97 void setTim1OCPeriod(float desiredTime, double dutyCycle, float freqPeriod) {
+1071                     	switch	.text
+1072  0275               _setTim1OCPeriod:
+1074  0275 520c          	subw	sp,#12
+1075       0000000c      OFST:	set	12
+1078                     ; 100 	psc = determineMinPsc(desiredTime, freqPeriod);
+1080  0277 1e19          	ldw	x,(OFST+13,sp)
+1081  0279 89            	pushw	x
+1082  027a 1e19          	ldw	x,(OFST+13,sp)
+1083  027c 89            	pushw	x
+1084  027d 1e15          	ldw	x,(OFST+9,sp)
+1085  027f 89            	pushw	x
+1086  0280 1e15          	ldw	x,(OFST+9,sp)
+1087  0282 89            	pushw	x
+1088  0283 cd0063        	call	_determineMinPsc
+1090  0286 5b08          	addw	sp,#8
+1091  0288 cd0000        	call	c_uitolx
+1093  028b 96            	ldw	x,sp
+1094  028c 1c0005        	addw	x,#OFST-7
+1095  028f cd0000        	call	c_rtol
+1098                     ; 101 	arr = determineArr(desiredTime, freqPeriod, psc);
+1100  0292 1e07          	ldw	x,(OFST-5,sp)
+1101  0294 89            	pushw	x
+1102  0295 1e1b          	ldw	x,(OFST+15,sp)
+1103  0297 89            	pushw	x
+1104  0298 1e1b          	ldw	x,(OFST+15,sp)
+1105  029a 89            	pushw	x
+1106  029b 1e17          	ldw	x,(OFST+11,sp)
+1107  029d 89            	pushw	x
+1108  029e 1e17          	ldw	x,(OFST+11,sp)
+1109  02a0 89            	pushw	x
+1110  02a1 cd00cf        	call	_determineArr
+1112  02a4 5b0a          	addw	sp,#10
+1113  02a6 cd0000        	call	c_uitolx
+1115  02a9 96            	ldw	x,sp
+1116  02aa 1c0009        	addw	x,#OFST-3
+1117  02ad cd0000        	call	c_rtol
+1120                     ; 102 	ocValue = determineOCValue(arr, dutyCycle);
+1122  02b0 1e15          	ldw	x,(OFST+9,sp)
+1123  02b2 89            	pushw	x
+1124  02b3 1e15          	ldw	x,(OFST+9,sp)
+1125  02b5 89            	pushw	x
+1126  02b6 96            	ldw	x,sp
+1127  02b7 1c000d        	addw	x,#OFST+1
+1128  02ba cd0000        	call	c_ltor
+1130  02bd cd0000        	call	c_ultof
+1132  02c0 be02          	ldw	x,c_lreg+2
+1133  02c2 89            	pushw	x
+1134  02c3 be00          	ldw	x,c_lreg
+1135  02c5 89            	pushw	x
+1136  02c6 cd010a        	call	_determineOCValue
+1138  02c9 5b08          	addw	sp,#8
+1139  02cb cd0000        	call	c_uitolx
+1141  02ce 96            	ldw	x,sp
+1142  02cf 1c0001        	addw	x,#OFST-11
+1143  02d2 cd0000        	call	c_rtol
+1146                     ; 104 	tim1SetValues(arr, psc, 0);
+1148  02d5 5f            	clrw	x
+1149  02d6 89            	pushw	x
+1150  02d7 1e09          	ldw	x,(OFST-3,sp)
+1151  02d9 89            	pushw	x
+1152  02da 1e0f          	ldw	x,(OFST+3,sp)
+1153  02dc cd0199        	call	_tim1SetValues
+1155  02df 5b04          	addw	sp,#4
+1156                     ; 105 	tim1OCSetValue(TIM_CH2, ocValue);
+1158  02e1 1e03          	ldw	x,(OFST-9,sp)
+1159  02e3 89            	pushw	x
+1160  02e4 ae0002        	ldw	x,#2
+1161  02e7 89            	pushw	x
+1162  02e8 ae0000        	ldw	x,#0
+1163  02eb 89            	pushw	x
+1164  02ec cd01ee        	call	_tim1OCSetValue
+1166  02ef 5b06          	addw	sp,#6
+1167                     ; 106 }
+1170  02f1 5b0c          	addw	sp,#12
+1171  02f3 81            	ret
+1243                     ; 108 void setTim1Freq(uint32_t desiredFreq, double dutyCycle) {
+1244                     	switch	.text
+1245  02f4               _setTim1Freq:
+1247  02f4 520c          	subw	sp,#12
+1248       0000000c      OFST:	set	12
+1251                     ; 113 	systemClkFreq = getMasterClkFreq();
+1253  02f6 cd03e5        	call	_getMasterClkFreq
+1255  02f9 96            	ldw	x,sp
+1256  02fa 1c0009        	addw	x,#OFST-3
+1257  02fd cd0000        	call	c_rtol
+1260                     ; 114 	desiredTime = (1/(float)desiredFreq);
+1262  0300 96            	ldw	x,sp
+1263  0301 1c000f        	addw	x,#OFST+3
+1264  0304 cd0000        	call	c_ltor
+1266  0307 cd0000        	call	c_ultof
+1268  030a 96            	ldw	x,sp
+1269  030b 1c0001        	addw	x,#OFST-11
+1270  030e cd0000        	call	c_rtol
+1273  0311 a601          	ld	a,#1
+1274  0313 cd0000        	call	c_ctof
+1276  0316 96            	ldw	x,sp
+1277  0317 1c0001        	addw	x,#OFST-11
+1278  031a cd0000        	call	c_fdiv
+1280  031d 96            	ldw	x,sp
+1281  031e 1c0005        	addw	x,#OFST-7
+1282  0321 cd0000        	call	c_rtol
+1285                     ; 115 	freqPeriod = (1/(float)systemClkFreq);
+1287  0324 96            	ldw	x,sp
+1288  0325 1c0009        	addw	x,#OFST-3
+1289  0328 cd0000        	call	c_ltor
+1291  032b cd0000        	call	c_ultof
+1293  032e 96            	ldw	x,sp
+1294  032f 1c0001        	addw	x,#OFST-11
+1295  0332 cd0000        	call	c_rtol
+1298  0335 a601          	ld	a,#1
+1299  0337 cd0000        	call	c_ctof
+1301  033a 96            	ldw	x,sp
+1302  033b 1c0001        	addw	x,#OFST-11
+1303  033e cd0000        	call	c_fdiv
+1305  0341 96            	ldw	x,sp
+1306  0342 1c0009        	addw	x,#OFST-3
+1307  0345 cd0000        	call	c_rtol
+1310                     ; 116 	setTim1OCPeriod(desiredTime, dutyCycle, freqPeriod);
+1312  0348 1e0b          	ldw	x,(OFST-1,sp)
+1313  034a 89            	pushw	x
+1314  034b 1e0b          	ldw	x,(OFST-1,sp)
+1315  034d 89            	pushw	x
+1316  034e 1e19          	ldw	x,(OFST+13,sp)
+1317  0350 89            	pushw	x
+1318  0351 1e19          	ldw	x,(OFST+13,sp)
+1319  0353 89            	pushw	x
+1320  0354 1e0f          	ldw	x,(OFST+3,sp)
+1321  0356 89            	pushw	x
+1322  0357 1e0f          	ldw	x,(OFST+3,sp)
+1323  0359 89            	pushw	x
+1324  035a cd0275        	call	_setTim1OCPeriod
+1326  035d 5b0c          	addw	sp,#12
+1327                     ; 117 }
+1330  035f 5b0c          	addw	sp,#12
+1331  0361 81            	ret
+1375                     	switch	.const
+1376  0004               L43:
+1377  0004 00000003      	dc.l	3
+1378  0008               L63:
+1379  0008 00000005      	dc.l	5
+1380                     ; 119 void tim1InitOC(uint32_t channel, uint32_t mode) {
+1381                     	switch	.text
+1382  0362               _tim1InitOC:
+1384       00000000      OFST:	set	0
+1387                     ; 120 	TIM1_ENABLE_CLK_GATING();
+1389  0362 358050c7      	mov	20679,#128
+1390                     ; 121 	tim1OCSetMode(channel, mode);
+1392  0366 1e09          	ldw	x,(OFST+9,sp)
+1393  0368 89            	pushw	x
+1394  0369 1e09          	ldw	x,(OFST+9,sp)
+1395  036b 89            	pushw	x
+1396  036c 1e09          	ldw	x,(OFST+9,sp)
+1397  036e 89            	pushw	x
+1398  036f 1e09          	ldw	x,(OFST+9,sp)
+1399  0371 89            	pushw	x
+1400  0372 cd0239        	call	_tim1OCSetMode
+1402  0375 5b08          	addw	sp,#8
+1403                     ; 123 	if(channel > 2 && channel < 5)
+1405  0377 96            	ldw	x,sp
+1406  0378 1c0003        	addw	x,#OFST+3
+1407  037b cd0000        	call	c_ltor
+1409  037e ae0004        	ldw	x,#L43
+1410  0381 cd0000        	call	c_lcmp
+1412  0384 2529          	jrult	L774
+1414  0386 96            	ldw	x,sp
+1415  0387 1c0003        	addw	x,#OFST+3
+1416  038a cd0000        	call	c_ltor
+1418  038d ae0008        	ldw	x,#L63
+1419  0390 cd0000        	call	c_lcmp
+1421  0393 241a          	jruge	L774
+1422                     ; 124 		TIM1->CCER2 |= (5 << (((channel) - 3) *4));
+1424  0395 7b06          	ld	a,(OFST+6,sp)
+1425  0397 48            	sll	a
+1426  0398 48            	sll	a
+1427  0399 5f            	clrw	x
+1428  039a 97            	ld	xl,a
+1429  039b 1d000c        	subw	x,#12
+1430  039e a605          	ld	a,#5
+1431  03a0 5d            	tnzw	x
+1432  03a1 2704          	jreq	L04
+1433  03a3               L24:
+1434  03a3 48            	sll	a
+1435  03a4 5a            	decw	x
+1436  03a5 26fc          	jrne	L24
+1437  03a7               L04:
+1438  03a7 ca525d        	or	a,21085
+1439  03aa c7525d        	ld	21085,a
+1441  03ad 2030          	jra	L105
+1442  03af               L774:
+1443                     ; 126 	else if(channel > 0 && channel < 3)
+1445  03af 96            	ldw	x,sp
+1446  03b0 1c0003        	addw	x,#OFST+3
+1447  03b3 cd0000        	call	c_lzmp
+1449  03b6 272c          	jreq	L305
+1451  03b8 96            	ldw	x,sp
+1452  03b9 1c0003        	addw	x,#OFST+3
+1453  03bc cd0000        	call	c_ltor
+1455  03bf ae0004        	ldw	x,#L43
+1456  03c2 cd0000        	call	c_lcmp
+1458  03c5 241d          	jruge	L305
+1459                     ; 127 		TIM1->CCER1 |= (5 << (((channel) - 1) *4));
+1461  03c7 7b06          	ld	a,(OFST+6,sp)
+1462  03c9 48            	sll	a
+1463  03ca 48            	sll	a
+1464  03cb 5f            	clrw	x
+1465  03cc 97            	ld	xl,a
+1466  03cd 1d0004        	subw	x,#4
+1467  03d0 a605          	ld	a,#5
+1468  03d2 5d            	tnzw	x
+1469  03d3 2704          	jreq	L44
+1470  03d5               L64:
+1471  03d5 48            	sll	a
+1472  03d6 5a            	decw	x
+1473  03d7 26fc          	jrne	L64
+1474  03d9               L44:
+1475  03d9 ca525c        	or	a,21084
+1476  03dc c7525c        	ld	21084,a
+1478  03df               L105:
+1479                     ; 131 	TIM1_MOE_ENABLE();
+1481  03df 721e526d      	bset	21101,#7
+1482                     ; 132 }
+1485  03e3 81            	ret
+1486  03e4               L305:
+1487                     ; 130 		return;
+1490  03e4 81            	ret
+1533                     ; 134 uint32_t getMasterClkFreq(void) {
+1534                     	switch	.text
+1535  03e5               _getMasterClkFreq:
+1537  03e5 5206          	subw	sp,#6
+1538       00000006      OFST:	set	6
+1541                     ; 136 	int clkdivr = ((CLK->CKDIVR & 0x18) >> 3);
+1543  03e7 c650c6        	ld	a,20678
+1544  03ea 44            	srl	a
+1545  03eb 44            	srl	a
+1546  03ec 44            	srl	a
+1547  03ed 5f            	clrw	x
+1548  03ee a403          	and	a,#3
+1549  03f0 5f            	clrw	x
+1550  03f1 5f            	clrw	x
+1551  03f2 97            	ld	xl,a
+1552  03f3 1f01          	ldw	(OFST-5,sp),x
+1554                     ; 138 	switch(clkdivr) {
+1556  03f5 1e01          	ldw	x,(OFST-5,sp)
+1558                     ; 143 		default: systemClkFreq = 2000000;break;
+1559  03f7 5d            	tnzw	x
+1560  03f8 2715          	jreq	L705
+1561  03fa 5a            	decw	x
+1562  03fb 271e          	jreq	L115
+1563  03fd 5a            	decw	x
+1564  03fe 2727          	jreq	L315
+1565  0400 5a            	decw	x
+1566  0401 2730          	jreq	L515
+1567  0403               L715:
+1570  0403 ae8480        	ldw	x,#33920
+1571  0406 1f05          	ldw	(OFST-1,sp),x
+1572  0408 ae001e        	ldw	x,#30
+1573  040b 1f03          	ldw	(OFST-3,sp),x
+1577  040d 202e          	jra	L545
+1578  040f               L705:
+1579                     ; 139 		case 0 : systemClkFreq = 16000000;break;
+1581  040f ae2400        	ldw	x,#9216
+1582  0412 1f05          	ldw	(OFST-1,sp),x
+1583  0414 ae00f4        	ldw	x,#244
+1584  0417 1f03          	ldw	(OFST-3,sp),x
+1588  0419 2022          	jra	L545
+1589  041b               L115:
+1590                     ; 140 		case 1 : systemClkFreq = 8000000;break;
+1592  041b ae1200        	ldw	x,#4608
+1593  041e 1f05          	ldw	(OFST-1,sp),x
+1594  0420 ae007a        	ldw	x,#122
+1595  0423 1f03          	ldw	(OFST-3,sp),x
+1599  0425 2016          	jra	L545
+1600  0427               L315:
+1601                     ; 141 		case 2 : systemClkFreq = 4000000;break;
+1603  0427 ae0900        	ldw	x,#2304
+1604  042a 1f05          	ldw	(OFST-1,sp),x
+1605  042c ae003d        	ldw	x,#61
+1606  042f 1f03          	ldw	(OFST-3,sp),x
+1610  0431 200a          	jra	L545
+1611  0433               L515:
+1612                     ; 142 		case 3 : systemClkFreq = 2000000;break;
+1614  0433 ae8480        	ldw	x,#33920
+1615  0436 1f05          	ldw	(OFST-1,sp),x
+1616  0438 ae001e        	ldw	x,#30
+1617  043b 1f03          	ldw	(OFST-3,sp),x
+1621  043d               L545:
+1622                     ; 146 	return systemClkFreq;
+1624  043d 96            	ldw	x,sp
+1625  043e 1c0003        	addw	x,#OFST-3
+1626  0441 cd0000        	call	c_ltor
+1630  0444 5b06          	addw	sp,#6
+1631  0446 81            	ret
+1644                     	xdef	_tim1InitOC
+1645                     	xdef	_tim1OCSetValue
+1646                     	xdef	_tim1OCSetMode
+1647                     	xdef	_tim1SetValues
+1648                     	xdef	_setTim1OCPeriod
+1649                     	xdef	_setTim1Freq
+1650                     	xdef	_determineMinPsc
+1651                     	xdef	_determineArr
+1652                     	xdef	_determineOCValue
+1653                     	xdef	_getMasterClkFreq
+1654                     	xdef	_setTim1Deadtime
+1655                     	switch	.const
+1656  000c               L332:
+1657  000c 40000000      	dc.w	16384,0
+1658  0010               L122:
+1659  0010 42c80000      	dc.w	17096,0
+1660  0014               L55:
+1661  0014 42fe0000      	dc.w	17150,0
+1662  0018               L34:
+1663  0018 3089705f      	dc.w	12425,28767
+1664                     	xref.b	c_lreg
+1665                     	xref.b	c_x
+1685                     	xref	c_lzmp
+1686                     	xref	c_ladd
+1687                     	xref	c_lsbc
+1688                     	xref	c_uitolx
+1689                     	xref	c_ftoi
+1690                     	xref	c_lcmp
+1691                     	xref	c_ftol
+1692                     	xref	c_uitof
+1693                     	xref	c_fgadd
+1694                     	xref	c_fcmp
+1695                     	xref	c_fmul
+1696                     	xref	c_fgmul
+1697                     	xref	c_fdiv
+1698                     	xref	c_ultof
+1699                     	xref	c_ltor
+1700                     	xref	c_ctof
+1701                     	xref	c_rtol
+1702                     	end

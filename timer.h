@@ -2,6 +2,8 @@
 #define __TIMER_H__
 #include "stm8s.h"
 
+void setTim1Deadtime(float deadtime);
+uint32_t getMasterClkFreq(void);
 uint16_t determineOCValue(float arr, double dutyCycle);
 uint16_t determineArr(float desiredTime, float freqPeriod, uint16_t psc);
 uint16_t determineMinPsc(float desiredTime, float freqPeriod);
@@ -30,4 +32,3 @@ void tim1InitOC(uint32_t channel, uint32_t mode);
 
 
 #endif //__TIMER_H__
-

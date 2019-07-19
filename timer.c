@@ -6,7 +6,17 @@ typedef volatile uint8_t IoRegister;
 #define TIM1_ENABLE_CLK_GATING() 	(CLK->PCKENR1 = CLK_PCKENR1_TIM1)
 #define TIM1_MOE_ENABLE()					(TIM1->BKR) |= (1<<7)
 
+void setTim1Deadtime(float deadtime) {
+	uint32_t systemClkFreq = getMasterClkFreq();
+	float steps = (1/(float)systemClkFreq);
+	deadtime *= 0.000000001;
+	
+	if(deadtime > (steps * 127)) {
+	steps+=1;
+	}
 
+}
+	
 uint16_t determineMinPsc(float desiredTime, float freqPeriod) {
 	long int ticks;
 	uint16_t psc = 1;
@@ -36,7 +46,6 @@ uint16_t determineOCValue(float arr, double dutyCycle) {
 		OCValue = (uint16_t)(arr * dutyCycle);
 		return OCValue;
 	}
-	
 	
 	else if(dutyCycle < 100 && dutyCycle > 0) {
 		OCValue = (uint16_t)(arr * (dutyCycle / 100));
@@ -100,15 +109,8 @@ void setTim1Freq(uint32_t desiredFreq, double dutyCycle) {
 	float freqPeriod;
 	float desiredTime;
 	uint32_t systemClkFreq;
-	int clkdivr = ((CLK->CKDIVR & 0x18) >> 3);
-	
-	switch(clkdivr) {
-		case 0 : systemClkFreq = 16000000;break;
-		case 1 : systemClkFreq = 8000000;break;
-		case 2 : systemClkFreq = 4000000;break;
-		case 3 : systemClkFreq = 2000000;break;
-		default: systemClkFreq = 2000000;break;
-	}
+
+	systemClkFreq = getMasterClkFreq();
 	desiredTime = (1/(float)desiredFreq);
 	freqPeriod = (1/(float)systemClkFreq);
 	setTim1OCPeriod(desiredTime, dutyCycle, freqPeriod);
@@ -127,4 +129,19 @@ void tim1InitOC(uint32_t channel, uint32_t mode) {
 	else
 		return;
 	TIM1_MOE_ENABLE();
+}
+
+uint32_t getMasterClkFreq(void) {
+	uint32_t systemClkFreq;
+	int clkdivr = ((CLK->CKDIVR & 0x18) >> 3);
+	
+	switch(clkdivr) {
+		case 0 : systemClkFreq = 16000000;break;
+		case 1 : systemClkFreq = 8000000;break;
+		case 2 : systemClkFreq = 4000000;break;
+		case 3 : systemClkFreq = 2000000;break;
+		default: systemClkFreq = 2000000;break;
+	}
+	
+	return systemClkFreq;
 }
