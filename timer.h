@@ -2,7 +2,7 @@
 #define __TIMER_H__
 #include "stm8s.h"
 
-void setTim1Deadtime(float deadtime);
+void setTim1Deadtime(uint32_t deadtime);
 uint32_t getMasterClkFreq(void);
 uint16_t determineOCValue(float arr, double dutyCycle);
 uint16_t determineArr(float desiredTime, float freqPeriod, uint16_t psc);

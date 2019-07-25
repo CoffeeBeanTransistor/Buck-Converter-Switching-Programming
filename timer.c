@@ -1,20 +1,55 @@
 #include "stm8s.h"
 #include "timer.h"
 
+
 typedef volatile uint8_t IoRegister;
 
 #define TIM1_ENABLE_CLK_GATING() 	(CLK->PCKENR1 = CLK_PCKENR1_TIM1)
 #define TIM1_MOE_ENABLE()					(TIM1->BKR) |= (1<<7)
 
-void setTim1Deadtime(float deadtime) {
+void setTim1Deadtime(uint32_t deadtime) {
 	uint32_t systemClkFreq = getMasterClkFreq();
-	float steps = (1/(float)systemClkFreq);
-	deadtime *= 0.000000001;
+	uint32_t min;
+	uint32_t steps = (((1/(double)systemClkFreq)*1000000000) + 1);
 	
-	if(deadtime > (steps * 127)) {
-	steps+=1;
+	TIM1->DTR &= 0x00;
+	
+	if(deadtime <= (steps * 127)) {
+		if(deadtime < steps)
+			TIM1->DTR = 0x01;
+		else
+			TIM1->DTR |= (deadtime/steps);			
+	}
+	
+	else if(deadtime <= (steps * 2 * 127)) {
+		min = 64 * 2 * steps;
+		TIM1->DTR |= (1<<7);
+		if(deadtime < min)
+			TIM1->DTR = 0x80;
+		else
+			TIM1->DTR |= ((deadtime/(steps*2)) - 64);			
+	}
+	
+	else if(deadtime <= (steps * 8 * 63)) {
+		min = 32 * 8 * steps;
+		TIM1->DTR |= (3<<6);
+		if(deadtime < min)
+			TIM1->DTR = 0xC0;
+		else
+			TIM1->DTR |= ((deadtime/(steps*8)) - 32);			
+	}
+	
+	else if(deadtime <= (steps * 16 * 63)) {
+		min = 32 * 16 * steps;
+		TIM1->DTR |= (7<<5);
+		if(deadtime < min)
+			TIM1->DTR = 0xE0;
+		else
+			TIM1->DTR |= ((int)(deadtime/(steps*16)) - 32);			
 	}
 
+	else
+			TIM1->DTR = (deadtime <= (steps * 16 * 63));
 }
 	
 uint16_t determineMinPsc(float desiredTime, float freqPeriod) {
