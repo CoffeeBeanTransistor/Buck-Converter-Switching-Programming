@@ -44,4 +44,4 @@ It is an intelligent buck converter because it uses the microcontroller to vary 
 
 ## <a name="info"></a> Info
    ### i. <a name="req"></a> **Buck Converter**
-   
+   There are many types of switched-mode power supplies in this world. One of the common types is buck converter
