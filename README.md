@@ -1,14 +1,24 @@
 # Microcontroller-controlled SMPS Synchronous Buck Converter
 
-## Description
+## Contents
+1.  [Description](#des)
+2.  [Features](#feat)
+3.  [Requirements](#req)
+4.  [Info](#info)  
+    1. [Buck Converter](#bcon)
+    2. [OVP/OCP](#protection)
+    3. [Signal Filtering](#filter)
+    4. [Feedback Mechanism](#fb)
+
+## <a name="des"></a> Description
 This project is about designing a switched-mode power supply synchronous buck converter that is controlled by STM8S103F3P6 microcontroller. 
 It is an intelligent buck converter because it uses the microcontroller to vary the switching frequency and duty cycle dynamically to the desired voltage or current. There are 2 MOSFETs controlling the low side and high side synchronously by using a gate driver IR2101. The feedback mechanism is designed based on the typical B3603 feedback mechanism. It also has over-current current/voltage protection to turn the system off when the voltage/current exceeds the threshold.
 
-## Features
+## <a name="feat"></a> Features
 - [x] Controllable by microcontroller 
 - [x] Over current/voltage protection
 
-## Requirements
+## <a name="req"></a> Requirements
 **Hardware**
 - 1 x STM8S103F3P6 Microcontroller
 - 1 x STM32F103 Blue Pill Microcontroller
@@ -31,3 +41,7 @@ It is an intelligent buck converter because it uses the microcontroller to vary 
 **Software**
 - ST Visual Develop IDE
 - Cosmic CXSTM8 Compiler
+
+## <a name="info"></a> Info
+   ### i. <a name="req"></a> **Buck Converter**
+   There are many types of switched-mode power supplies in this world. One of the common types is buck converter
